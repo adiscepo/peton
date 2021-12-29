@@ -38,7 +38,7 @@ int main() {
     // std::cout << a << std::endl;
     // std::cout << IP_Machine::IPv42char(A_IP2) << std::endl;
     // std::cout << IP_Machine::IPv42char(a.longest_prefix(A_IP2)._subnet) << std::endl;
-    A->arp();
+    // A->arp();
     // Machine::connect(A, &C, 1, 0);
     // std::cout << *A << std::endl << std::endl;
     // std::cout << *B << std::endl << std::endl;
@@ -55,12 +55,13 @@ int main() {
     // Packet* p = Packet_Factory::ARP(*A, Packet::ARP::ARP_Opcode::REQUEST, A_MAC1, A_IP1, MAC_ARP_REQUEST, C_IP);
     // Packet* p = Packet_Factory::ETHERNET(A_MAC1, MAC_BROADCAST, Packet::ETHERNET::EtherType::ARP, *Packet_Factory::ARP(*A, Packet::ARP::ARP_Opcode::REQUEST, A_MAC1, A_IP1, MAC_ARP_REQUEST, C_IP));
     // A->send(*p, 1);
+    A->arp();
     A->send(*p);
+    A->arp();
     // std::cout << p << std::endl;
     // std::cout << *p << std::endl;
     // Packet P(A_MAC, C_MAC, Packet::ETHERTHYPE::IP, paquet);
     // A->send(P);
-    A->arp();
     // B->arp();
     // C.arp();
     

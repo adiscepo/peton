@@ -189,7 +189,7 @@ void IP_Machine::ARP_action(Packet& P, interface_t from_interface) {
 }
 
 void IP_Machine::IP_action(Packet& P, interface_t from_interface) {
-    std::cout << IP_Machine::IPv42char(P.data.ip.src) << " a envoyé un paquet. On l'a reçu depuis l'interface eth";
+    std::cout << IP_Machine::IPv42char(P.data.ip.src) << " a envoyé un paquet IP. On l'a reçu depuis l'interface eth";
     std::cout << from_interface << std::endl;
 }
 
@@ -209,7 +209,11 @@ void IP_Machine::action(Packet& P, interface_t from_interface) {
     }
 }
 
-void IP_Machine::arp() { std::cout << _arp_table << std::endl; };
+void IP_Machine::arp() { 
+    std::cout << "+--------------------------------------------------+" << std::endl;
+    std::cout << "|                   TABLE ARP de " << _label << "                 |" << std::endl;
+    std::cout << _arp_table << std::endl; 
+};
 
 std::ostream& operator << (std::ostream& o, const IP_Machine &I) {
     o << "La machine " << I._label << " a " << I._interfaces.size() << " interfaces:"; 

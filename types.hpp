@@ -6,13 +6,13 @@
 #include <vector>
 class IP_Machine;
 
-// #ifdef DEBUG
+#ifdef DEBUG
 #define DEBUG(log) std::cout << log << std::endl;
 #define LOG(machine, log) std::cout <<"[" << machine << "] " << log << std::endl;
-// #else
-// #define DEBUG(log);
-// #define LOG(machine, log);
-// #endif
+#else
+#define DEBUG(log);
+#define LOG(machine, log);
+#endif
 
 typedef uint32_t IPv4;
 typedef __int128_t IPv6;

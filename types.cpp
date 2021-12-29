@@ -58,8 +58,6 @@ ARP_Table::Entries ARP_Table::get_content(IPv4 ip) {
 };
 
 std::ostream& operator<<(std::ostream& o, const ARP_Table& R){
-    o << "+--------------------------------------------------+" << std::endl;
-    o << "|                     TABLE ARP                    |" << std::endl;
     o << "+-------------------+------------------+-----------+" << std::endl;
     o << "|        MAC        |        IP        | interface |" << std::endl;
     o << "+-------------------+------------------+-----------+" << std::endl;
@@ -82,7 +80,7 @@ std::ostream& operator<<(std::ostream& o, const ARP_Table& R){
     if(R._content.size() == 0) {
         o << "|                   Aucune entrée                  |" << std::endl;
     }
-    o << "+--------------------------------------------------+" << std::endl;
+    o << "+--------------------------------------------------+";
     return o;
 }
 
