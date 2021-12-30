@@ -18,6 +18,16 @@ typedef uint32_t IPv4;
 typedef __int128_t IPv6;
 typedef uint interface_t;
 
+typedef struct CIDR {
+    interface_t x:5;
+    friend std::ostream& operator<<(std::ostream& o, const CIDR& C) { 
+        o << C.x;
+        return o;
+    }
+} __attribute__((packed)) CIDR;
+
+IPv4 get_mask(CIDR mask);
+
 typedef struct MAC {
     uint64_t x:48;
     friend std::ostream& operator<<(std::ostream& o, const MAC& M) { 
@@ -29,15 +39,6 @@ typedef struct MAC {
     bool operator>(const MAC& M) { if (x > M.x) return true; return false;}    
     bool operator!=(const MAC& M) { if (x != M.x) return true; return false;}
 } __attribute__((packed)) MAC;
-
-typedef struct CIDR {
-    interface_t x:5;
-    friend std::ostream& operator<<(std::ostream& o, const CIDR& C) { 
-        o << C.x;
-        return o;
-    }
-} __attribute__((packed)) CIDR;
-
 
 typedef interface_t TTL;
 

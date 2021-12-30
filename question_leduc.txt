@@ -1,0 +1,24 @@
+Bonjour Monsieur,
+
+Je vous contacte par rapport à une question que je me suis posée en étudiant le fonctionnement des couches "Liaison de Données" et "Internet".
+Lorsqu'une interface se connecte à un réseau, comment celle-ci obtient l'adresse IP du routeur qui lui permet de transférer ses paquets vers "le monde extérieur" (donc l'adresse IP passerelle qui est accessible avec la commande ip route) ?
+Je ne pense pas que l'on ai vu de protocoles pour faire cela au cours théorique; j'ai donc entamé des recherches et testé à l'aide de netkit.
+J'ai coupé l'interface d'un client connecté à un routeur, fait un tcpdump sur le routeur et rallumé l'interface du client. J'ai obtenu uniquement des paquets ICMPv6 mais je n'arrive pas bien à les comprendre.
+Voici les paquets obtenu
+[IMAGE]
+Sauriez vous m'aider à comprendre :
+	Ce que signifie le "::" en source des trois premiers paquets ? Mon intuition me fait penser que l'interface - n'ayant pas encore d'adresse IP - laisse ce champs vide pour envoyer le paquet ?
+	De même que signifie l'adresse de destination dans les paquets 1 et 3 (d'après l'info de la dernière colonne il s'agirait d'un "Multicast", est-ce de ça qu'il s'agit ?)
+	L'adresse de destination du paquet 3 n'appartient à aucune des deux machines, serait ce aussi une adresse de "Multicast" ?
+	Les lignes 4 à 6 n'ont pas l'air de jouer de rôle dans l'établissement du lien avec le routeur passerelle mais d'être des requêtes pour autre choses émisent depuis le client.
+
+	Si ces paquets représentent bien la récupération de l'adresse IP passerelle, doit-elle obligatoirement se faire en IPv6 ?
+	Si ces paquets n'ont rien à voir avec la récupération de l'IP passerelle, comment se passe t'elle ?
+
+Bien à vous,
+
+Attilio DISCEPOLI
+---------------------
+Tests:
+* Même en désactivant IPv6, ça fonctionne => ICMPv6 ne serait peut-être pas l'unique composant 
+* Lorsqu'on éteint et rallume l'interface, l'entrée de sous-réseau tombe tout de suite (sûrement déduite de l'ip et du masque de l'interface) mais elle ne donne pas de connexion. Il faut attendre +- 10 secondes pour que l'entrée de la passerelle par défaut s'ajoute -> par une requête DHCP ?

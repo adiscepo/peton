@@ -3,6 +3,13 @@
 
 #include <bitset>
 
+IPv4 get_mask(CIDR mask){
+    IPv4 subnet_mask = 0b11111111111111111111111111111111;
+    if (mask.x == 0) return subnet_mask; // Pcq quand mask = 32 : overflow et mask = 0
+    for (size_t i = 1; i <= 32; i++) if (i > mask.x) subnet_mask ^= 1 << (32-i);
+    return subnet_mask;
+};
+
 bool ARP_Table::is_MAC_in(MAC mac) {
     for (auto elem: _content){
         if (elem.mac == mac) return true;

@@ -1,0 +1,37 @@
+[
+{
+  "directory": "/home/zandies/Dokumentoj/peton/build",
+  "command": "/usr/bin/c++    -fcoroutines -fconcepts -pthread -fopenacc -fopenmp -ggdb3 -Wpedantic -Wall -Wextra -Wconversion -Wsign-conversion -Weffc++ -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-override -g -o CMakeFiles/peton.dir/main.cpp.o -c /home/zandies/Dokumentoj/peton/main.cpp",
+  "file": "/home/zandies/Dokumentoj/peton/main.cpp"
+},
+{
+  "directory": "/home/zandies/Dokumentoj/peton/build",
+  "command": "/usr/bin/c++    -fcoroutines -fconcepts -pthread -fopenacc -fopenmp -ggdb3 -Wpedantic -Wall -Wextra -Wconversion -Wsign-conversion -Weffc++ -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-override -g -o CMakeFiles/peton.dir/Machine.cpp.o -c /home/zandies/Dokumentoj/peton/Machine.cpp",
+  "file": "/home/zandies/Dokumentoj/peton/Machine.cpp"
+},
+{
+  "directory": "/home/zandies/Dokumentoj/peton/build",
+  "command": "/usr/bin/c++    -fcoroutines -fconcepts -pthread -fopenacc -fopenmp -ggdb3 -Wpedantic -Wall -Wextra -Wconversion -Wsign-conversion -Weffc++ -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-override -g -o CMakeFiles/peton.dir/IP_Machine.cpp.o -c /home/zandies/Dokumentoj/peton/IP_Machine.cpp",
+  "file": "/home/zandies/Dokumentoj/peton/IP_Machine.cpp"
+},
+{
+  "directory": "/home/zandies/Dokumentoj/peton/build",
+  "command": "/usr/bin/c++    -fcoroutines -fconcepts -pthread -fopenacc -fopenmp -ggdb3 -Wpedantic -Wall -Wextra -Wconversion -Wsign-conversion -Weffc++ -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-override -g -o CMakeFiles/peton.dir/Packet.cpp.o -c /home/zandies/Dokumentoj/peton/Packet.cpp",
+  "file": "/home/zandies/Dokumentoj/peton/Packet.cpp"
+},
+{
+  "directory": "/home/zandies/Dokumentoj/peton/build",
+  "command": "/usr/bin/c++    -fcoroutines -fconcepts -pthread -fopenacc -fopenmp -ggdb3 -Wpedantic -Wall -Wextra -Wconversion -Wsign-conversion -Weffc++ -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-override -g -o CMakeFiles/peton.dir/Link.cpp.o -c /home/zandies/Dokumentoj/peton/Link.cpp",
+  "file": "/home/zandies/Dokumentoj/peton/Link.cpp"
+},
+{
+  "directory": "/home/zandies/Dokumentoj/peton/build",
+  "command": "/usr/bin/c++    -fcoroutines -fconcepts -pthread -fopenacc -fopenmp -ggdb3 -Wpedantic -Wall -Wextra -Wconversion -Wsign-conversion -Weffc++ -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-override -g -o CMakeFiles/peton.dir/Interface.cpp.o -c /home/zandies/Dokumentoj/peton/Interface.cpp",
+  "file": "/home/zandies/Dokumentoj/peton/Interface.cpp"
+},
+{
+  "directory": "/home/zandies/Dokumentoj/peton/build",
+  "command": "/usr/bin/c++    -fcoroutines -fconcepts -pthread -fopenacc -fopenmp -ggdb3 -Wpedantic -Wall -Wextra -Wconversion -Wsign-conversion -Weffc++ -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-override -g -o CMakeFiles/peton.dir/types.cpp.o -c /home/zandies/Dokumentoj/peton/types.cpp",
+  "file": "/home/zandies/Dokumentoj/peton/types.cpp"
+}
+]

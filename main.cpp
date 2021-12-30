@@ -50,14 +50,17 @@ int main() {
     // A->send(P_ARP);
     // A->get_arp_table()->add_in_table(C_MAC, C_IP, 0);
     // A->arp();
-    // Remplacer (*A, 1) par (Interface&) ? Permet de pas devoir l'interface_t de la machine, mais uniquement l'interface
     Packet* p = Packet_Factory::IP(*A_eth1, Packet::IP::IP_Protocol::ICMP, B_IP, nullptr);
     // Packet* p = Packet_Factory::ARP(*A, Packet::ARP::ARP_Opcode::REQUEST, A_MAC1, A_IP1, MAC_ARP_REQUEST, C_IP);
     // Packet* p = Packet_Factory::ETHERNET(A_MAC1, MAC_BROADCAST, Packet::ETHERNET::EtherType::ARP, *Packet_Factory::ARP(*A, Packet::ARP::ARP_Opcode::REQUEST, A_MAC1, A_IP1, MAC_ARP_REQUEST, C_IP));
     // A->send(*p, 1);
     A->arp();
-    A->send(*p);
+    B->arp();
+    C->arp();
+    A->send(*p); // Ne fonctionne que sur un même réseau local -> je dois ajouter les tables de routages dans chaque IP_Machine;
     A->arp();
+    B->arp();
+    C->arp();
     // std::cout << p << std::endl;
     // std::cout << *p << std::endl;
     // Packet P(A_MAC, C_MAC, Packet::ETHERTHYPE::IP, paquet);

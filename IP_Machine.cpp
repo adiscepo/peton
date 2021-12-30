@@ -73,13 +73,6 @@ std::string IP_Machine::MAC2char(MAC mac) {
     return res;
 }
 
-IPv4 IP_Machine::get_net_part(IPv4 ip, CIDR mask){
-    IPv4 subnet_mask = 0b11111111111111111111111111111111;
-    if (mask.x == 0) return subnet_mask; // Pcq quand mask = 32 : overflow et mask = 0
-    for (size_t i = 1; i <= 32; i++) if (i > mask.x) subnet_mask ^= 1 << (32-i);
-    return subnet_mask;
-};
-
 // Méthodes
 
 IP_Machine::IP_Machine(std::vector<Interface*> interfaces) : _label(static_cast<char>(65 + total)) 
@@ -141,13 +134,13 @@ void IP_Machine::receipt(Packet& P, interface_t from_interface) {
 void IP_Machine::ARP_action(Packet& P, interface_t from_interface) {
     LOG(_label, "le paquet contient un header ARP");
     // Est-ce que c'est mon adresse MAC que l'on veut ? On le sait en regardant l'IP de destination
-    if (P.data.arp.ip_target == interface(from_interface)->get_ip()){
+    if (P.data.arp.ip_target == interface(from_interface).get_ip()){
         if (P.data.arp.opcode == Packet::ARP::ARP_Opcode::REQUEST){
             LOG(_label, "Oui c'est bien moi qu'on cherche !");
             // Répond à la requête par un nouveau paquet ARP
             // Ajoute les infos du paquet que l'on vient de recevoir dans la table ARP de la machine
             _arp_table.add_in_table(P.data.arp.mac_sender, P.data.arp.ip_sender, from_interface);
-            Packet* res = Packet_Factory::ARP(*this, Packet::ARP::ARP_Opcode::RESPONSE, interface(from_interface)->get_mac(), interface(from_interface)->get_ip(), P.data.arp.mac_sender, P.data.arp.ip_sender); 
+            Packet* res = Packet_Factory::ARP(*this, Packet::ARP::ARP_Opcode::RESPONSE, interface(from_interface).get_mac(), interface(from_interface).get_ip(), P.data.arp.mac_sender, P.data.arp.ip_sender); 
             // interface(from_interface);
             send(*res);
         }else if (P.data.arp.opcode == Packet::ARP::ARP_Opcode::RESPONSE){
@@ -160,32 +153,6 @@ void IP_Machine::ARP_action(Packet& P, interface_t from_interface) {
         LOG(_label, "Ah bah non c'était pas pour moi...");
         // Ignore
     }
-    // Payload* p = P.get_content();
-    // if (p->get_type() == ARP_OPCODE::REQUEST) { // C'est une requête pour savoir si l'adresse IP dans le paquet m'appartient
-    //     LOG(_label, "c'est une requête");
-    //     if (p->get_ip_dest() == _ip){ // Oui c'est la mienne
-    //         LOG(_label, "c'est une requête qui m'est destinée");
-    //         // Je forge un paquet pour répondre
-    //         ARP_Payload *arp_res = new ARP_Payload(_mac, p->get_mac_src(), _ip, p->get_ip_src(), ARP_OPCODE::RESPONSE);
-    //         Packet response(_mac, p->get_mac_src(), Packet::ETHERTHYPE::ARP, arp_res);
-    //         // J'ajoute l'entrée dans ma table ARP pour pouvoir répondre
-    //         if (!_arp_table.is_MAC_in(p->get_mac_src())) {
-    //             LOG(_label, "j'ajoute l'entrée dans ma table ARP");
-    //             _arp_table.add_in_table(p->get_mac_src(), p->get_ip_src(), from_interface);
-    //         }
-    //         LOG(_label, "je répond par une requête ARP de réponse");
-    //         forward(response, from_interface); // On renvoit la réponse par la même interface par laquelle il est arrivé
-    //     }else{ // Non c'est pas à moi
-    //         LOG(_label, "c'est une requête qui ne m'est pas destinée");
-    //         // Osef
-    //     }
-    // }else if (p->get_type() == ARP_OPCODE::RESPONSE) {
-    //     LOG(_label, "j'ai reçu une réponse ARP");
-    //     if (p->get_ip_dest() == _ip){ // Oui c'est bien moi le destinataire
-    //         LOG(_label, "j'ajoute l'entrée dans ma table ARP");
-    //         _arp_table.add_in_table(p->get_mac_src(), p->get_ip_src(), from_interface);
-    //     }
-    // }
 }
 
 void IP_Machine::IP_action(Packet& P, interface_t from_interface) {
