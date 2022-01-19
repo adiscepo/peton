@@ -27,6 +27,7 @@ typedef struct CIDR {
 } __attribute__((packed)) CIDR;
 
 IPv4 get_mask(CIDR mask);
+IPv4 get_subnet(IPv4 ip, CIDR mask);
 
 typedef struct MAC {
     uint64_t x:48;
@@ -74,12 +75,12 @@ class Routing_Table {
         CIDR _mask;
         uint _metric;
         interface_t _interface;
-        IP_Machine* _next_hop_routeur;
+        IPv4 _via;
     } Entries;
     std::vector<Entries> _content = {};
 public:
     inline Routing_Table() = default;
-    bool add_in_table(IPv4 subnet, CIDR mask, uint metric, interface_t interface, IP_Machine* next_hop_router);
+    bool add_in_table(IPv4 subnet, CIDR mask, uint metric, interface_t interface, IPv4 via);
     bool is_IP_in(IPv4 ip);
     Entries longest_prefix(IPv4 ip);
     friend std::ostream& operator<<(std::ostream& o, const Routing_Table& R);
@@ -90,54 +91,10 @@ enum class ARP_OPCODE {
     RESPONSE = 2
 };
 
-class Payload {
-public:
-    virtual MAC get_mac_src() { return {}; }
-    virtual MAC get_mac_dest() { return {}; }
-    virtual IPv4 get_ip_src() { return {}; }
-    virtual IPv4 get_ip_dest() { return {}; }
-    virtual Payload* get_payload() { return {}; }
-    virtual ARP_OPCODE get_type() { return {}; }
-    virtual ~Payload() noexcept = default;
-};
-
-class ARP_Payload : public Payload {
-    MAC _mac_src;
-    MAC _mac_dest;
-    IPv4 _ip_src;
-    IPv4 _ip_dest;
-    ARP_OPCODE _type;
-public:
-    ARP_Payload(MAC mac_src, MAC mac_dest, IPv4 ip_src, IPv4 ip_dest, ARP_OPCODE type) :
-        _mac_src(mac_src), _mac_dest(mac_dest), _ip_src(ip_src), _ip_dest(ip_dest), _type(type) {}
-    inline MAC get_mac_src() override { return _mac_src; };
-    inline MAC get_mac_dest() override { return _mac_dest; };
-    inline IPv4 get_ip_src() override { return _ip_src; };
-    inline IPv4 get_ip_dest() override { return _ip_dest; };
-    inline ARP_OPCODE get_type() override { return _type; };
-
-};
-
-class IP_Header : public Payload {
-    IPv4 _ip_src;
-    IPv4 _ip_dest;
-    Payload* _payload;
-public:
-    IP_Header(IPv4 ip_src, IPv4 ip_dest, Payload* payload) :
-        _ip_src(ip_src), _ip_dest(ip_dest), _payload(payload) {}
-    inline IPv4 get_ip_src() override { return _ip_src; };
-    inline IPv4 get_ip_dest() override { return _ip_dest; };
-    inline Payload* get_payload() override { return _payload; };
-    inline constexpr IP_Header(const IP_Header&) = delete;
-    inline constexpr IP_Header& operator=(const IP_Header&) = delete;
-};
-
-class ICMP_Header : public Payload {
-
-};
-
 const MAC MAC_BROADCAST = {0xffffffffffff};
 const MAC MAC_ARP_REQUEST = {0x000000000000};
 const MAC MAC_ERROR = {};
+
+const IPv4 IP_DEFAULT = 0x0;
 
 #endif

@@ -44,19 +44,23 @@ Packet* Packet_Factory::IP(Interface& from, Packet::IP::IP_Protocol protocol, IP
     auto m = from.get_machine();
     ip->type = Packet::Type::IP;
     ip->data.ip = Packet::IP(protocol, from.get_ip(), ip_dest, payload);
+
+    ip_dest = m->get_routing_table().longest_prefix(ip_dest)._via; // On récupère l'ip de la machine nous permettant d'accéder au sous-réseau voulu
+    
+    LOG(from.get_machine()->get_label(), "Est-ce que je connais l'adresse MAC de " + IP_Machine::IPv42char(ip_dest) + " ?")
     if (m->get_arp_table().is_IP_in(ip_dest)){ // La machine a l'adresse
-        LOG(from.get_machine()->get_label(), "J'ai l'entrée dans ma table ARP")
-        ethernet = Packet_Factory::ETHERNET(from.get_mac(), 
+        LOG(from.get_machine()->get_label(), "Oui, j'ai l'entrée dans ma table ARP, son adresse MAC est " + IP_Machine::MAC2char(m->get_arp_table().from_IP(ip_dest)))
+        return Packet_Factory::ETHERNET(from.get_mac(), 
                                             m->get_arp_table().from_IP(ip_dest), 
                                             Packet::ETHERNET::EtherType::IP, 
                                             *ip);
     }else{
-        LOG(from.get_machine()->get_label(), "J'ai que dalle")
+        LOG(from.get_machine()->get_label(), "J'ai que dalle, j'interroge mes voisins pour savoir si quelqu'un a cet adresse IP sur mon sous-réseau (requête ARP)")
         Packet* p = Packet_Factory::ARP(*from.get_machine(), Packet::ARP::ARP_Opcode::REQUEST, from.get_mac(), from.get_ip(), {}, ip_dest);
         from.send(*p); // Va mettre à jour la table ARP de machine from
         if (m->get_arp_table().is_IP_in(ip_dest)){
-            LOG(from.get_machine()->get_label(), "J'ai l'entrée dans ma table ARP II")
-            ethernet = Packet_Factory::ETHERNET(from.get_mac(), 
+            LOG(from.get_machine()->get_label(), "J'ai récupéré l'adresse MAC de " + IP_Machine::IPv42char(ip_dest) + " ! C'est " + IP_Machine::MAC2char(m->get_arp_table().from_IP(ip_dest)))
+            return Packet_Factory::ETHERNET(from.get_mac(), 
                                                 m->get_arp_table().from_IP(ip_dest), 
                                                 Packet::ETHERNET::EtherType::IP, 
                                                 *ip);
@@ -65,7 +69,15 @@ Packet* Packet_Factory::IP(Interface& from, Packet::IP::IP_Protocol protocol, IP
             LOG(from.get_machine()->get_label(), "[PROBLEM] Ok là je viens d'envoier une req ARP et ma table ne s'est pas mise à jour, je sais pas")
         }
     }
-    return ethernet;
+    return nullptr;
+};
+
+Packet* Packet_Factory::ICMP(Interface& from, IPv4 ip_dest, Packet::ICMP::ICMP_Type type) {
+    Packet* icmp = new Packet();
+    icmp->type = Packet::Type::ICMP;
+    icmp->data.icmp = Packet::ICMP(type);
+    if (type == Packet::ICMP::ICMP_Type::ECHO_req) LOG(from.get_machine()->get_label(), "Ping");
+    return Packet_Factory::IP(from, Packet::IP::IP_Protocol::ICMP, ip_dest, icmp);
 };
 
 
@@ -84,7 +96,7 @@ std::ostream& operator<< (std::ostream& o, const Packet::ARP& P) {
     o << "+----------+----------ARP----------+" << std::endl
         << "| Opcode   |  " << ((P.opcode == Packet::ARP::ARP_Opcode::REQUEST) ? 1 : 2) << "                    |" << std::endl
         << "| MAC src  |  " << IP_Machine::MAC2char(P.mac_sender)  << "    |" << std::endl
-        << "| IP dest  |  ";
+        << "| IP src   |  ";
     std::cout.setf(std::ios::left, std::ios::adjustfield);
     std::cout.width(21);
     o << IP_Machine::IPv42char(P.ip_sender);
@@ -97,10 +109,25 @@ std::ostream& operator<< (std::ostream& o, const Packet::ARP& P) {
     return o;
 }
 
+
+std::ostream& operator<< (std::ostream& o, const Packet::ICMP& I) {
+    o << "+----------+---------ICMP----------+" << std::endl
+      << "|  Type    |  ";
+      std::cout.setf(std::ios::left, std::ios::adjustfield);
+      std::cout.width(23);
+    if (I.type == Packet::ICMP::ICMP_Type::ECHO_req) o << "Requête d'écho";
+    if (I.type == Packet::ICMP::ICMP_Type::ECHO_res) o << "Réponse d'écho";
+    o << "|";
+        return o;
+}
+
 std::ostream& operator<< (std::ostream& o, const Packet::IP& P) {
-    o << "+----------+-----------IP----------+" << std::endl
-        << "| Version  |  " << ((P.version == Packet::IP::IP_Version::IPv4) ? 4 : 6) << "                    |" << std::endl
-        << "| IP src   |  ";
+    o << "+----------+-----------IP----------+" << std::endl;
+    o << "| Version  |  ";
+    std::cout.setf(std::ios::left, std::ios::adjustfield);
+    std::cout.width(21);
+    o << ((P.version == Packet::IP::IP_Version::IPv4) ? 4 : 6) << "|" << std::endl;
+    o << "| IP src   |  ";
     std::cout.setf(std::ios::left, std::ios::adjustfield);
     std::cout.width(21);
     o << IP_Machine::IPv42char(P.src);
@@ -109,9 +136,11 @@ std::ostream& operator<< (std::ostream& o, const Packet::IP& P) {
     std::cout.setf(std::ios::left, std::ios::adjustfield);
     std::cout.width(21);
     o << IP_Machine::IPv42char(P.dest);
-    o << "|";
-        return o;
+    o << "|" << std::endl;
+    if (P.protocol == Packet::IP::IP_Protocol::ICMP) o << P.payload->data.icmp;
+    return o;
 }
+
 
 // std::ostream& operator<< (std::ostream& o, const Packet& P) {
     // o << "+------------Paquet-----------+" << std::endl

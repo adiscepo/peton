@@ -9,7 +9,8 @@ struct Packet {
     enum class Type {
         ETHERNET,
         ARP,
-        IP
+        IP,
+        ICMP
     } type = Type::ETHERNET;
 
     // Réprésente une trame Ethernet
@@ -48,11 +49,19 @@ struct Packet {
         IP(IP_Protocol protocol, IPv4 s, IPv4 d, Packet* p) : protocol{protocol}, src(s), dest(d), payload(p) {}
         friend std::ostream& operator<< (std::ostream& o, const IP& P);
     };
+
+    struct ICMP {
+        enum class ICMP_Type { ECHO_res = 0, ECHO_req = 8 };
+        ICMP_Type type;
+        ICMP(ICMP_Type type): type(type) {};
+        friend std::ostream& operator<< (std::ostream& o, const IP& P);
+    };
     
     union Data {
         ETHERNET ethernet;
         ARP arp;
         IP  ip;
+        ICMP icmp;
     } data{};
 
     static bool control_TTL(Packet& P);
@@ -69,33 +78,7 @@ public:
     static Packet* ETHERNET(MAC mac_sender, MAC mac_target, Packet::ETHERNET::EtherType type, Packet& payload);
     static Packet* ARP(IP_Machine& from, Packet::ARP::ARP_Opcode opcode, MAC mac_sender, IPv4 ip_sender, MAC mac_target, IPv4 ip_target);
     static Packet* IP(Interface& from, Packet::IP::IP_Protocol protocol, IPv4 ip_dest, Packet* payload);
+    static Packet* ICMP(Interface& from, IPv4 ip_dest, Packet::ICMP::ICMP_Type type);
 };
-
-// private:
-//     MAC _src;
-//     MAC _dest;
-//     ETHERTHYPE _type;
-//     TTL _ttl = 64;
-//     Payload* _payload;
-// public:
-//     Packet(MAC src, MAC dest, ETHERTHYPE type, Payload* payload) 
-//         : _src(src), _dest(dest), _type(type), _payload(payload) {};
-    
-//     inline MAC get_src() { return _src; }
-//     inline MAC get_dest() { return _dest; }
-//     inline TTL get_TTL() { return _ttl; }
-//     inline ETHERTHYPE get_type() { return _type; }
-//     inline Payload* get_content() { return _payload; }
-    
-//     inline void dec_TTL() { _ttl-=1; }
-//     inline void set_src(MAC src) { _src = src; }
-//     inline void set_dest(MAC dest) { _dest = dest; }
-
-//     static bool control_TTL(Packet& P);
-//     ~Packet() noexcept = default;
-    
-    // friend std::ostream& operator << (std::ostream& o, const Packet& P);
-
-
 
 #endif

@@ -18,7 +18,10 @@ private:
     void action(Packet& p, interface_t from_interface);
     void ARP_action(Packet& P, interface_t from_interface);
     void IP_action(Packet& P, interface_t from_interface);
-
+    void ICMP_action(Packet& P, interface_t from_interface);
+    void add_in_routing_table(IPv4 ip, CIDR mask, uint metric, interface_t interface);
+    bool as_ip(IPv4 ip);
+    bool as_mac(MAC mac);
 public:
     IP_Machine() : _label(static_cast<char>(65 + total)) { IP_Machine::total += 1; };
     IP_Machine(std::vector<Interface*> interfaces);
@@ -34,12 +37,15 @@ public:
     void receipt(Packet& p, interface_t from_interface);
 
     ARP_Table& get_arp_table() { return _arp_table; };
-
+    Routing_Table& get_routing_table() { return _routing_table; };
+    // // POUR TEST UNIQUEMENT
+    // Routing_Table& get_routing_table() { return _routing_table; };
+    // // -----
     void physical_layer(Packet& P, interface_t from_interface);
     void datalink_layer(Packet& P, interface_t from_interface);
 
-
     void arp();
+    void ip_route();
 
     char get_label() { return _label; }
     void set_label(char s) { _label = s; }
