@@ -2,7 +2,17 @@
 
 Permet l'émulation d'un réseau informatique.
 
-L'exemple dans le fichier main est le suivant
+## Compilation
+```sh
+cmake .
+make
+```
+
+Il est possible d'ajouter le flag -DDEBUG=1 pour avoir plus d'infos lors de l'éxécution du programme
+
+## Exemple
+
+L'exemple dans le fichier `./main.cpp` est le suivant
 
 ```
 +--------+                +--------+                +--------+
@@ -17,4 +27,8 @@ Ping de B depuis C.
 /!\ Les connexions et les tables de routages sont effectuées manuellement /!\
 
 Faronti
-[] DHCP
+ * UDP
+ * DHCP (Permet une connexion plus Plug&Play entre les machines)
+ * DNS
+ * TCP
+ * HTTP
