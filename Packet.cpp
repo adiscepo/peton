@@ -22,6 +22,7 @@ Packet* Packet_Factory::ETHERNET(MAC mac_sender, MAC mac_target, Packet::ETHERNE
     return ethernet;
 };
 
+
 Packet* Packet_Factory::ARP(IP_Machine& from, Packet::ARP::ARP_Opcode opcode, MAC mac_sender, IPv4 ip_sender, MAC mac_target, IPv4 ip_target) {
     Packet* ethernet;
     Packet* arp = new Packet();
@@ -39,11 +40,36 @@ Packet* Packet_Factory::ARP(IP_Machine& from, Packet::ARP::ARP_Opcode opcode, MA
 };
 
 Packet* Packet_Factory::IP(Interface& from, Packet::IP::IP_Protocol protocol, IPv4 ip_dest, Packet* payload) {
+    using P = Packet::IP;
     Packet* ethernet;
     Packet* ip = new Packet();
     auto m = from.get_machine();
     ip->type = Packet::Type::IP;
     ip->data.ip = Packet::IP(protocol, from.get_ip(), ip_dest, payload);
+
+    switch (protocol) {
+    case P::IP_Protocol::ICMP:
+        DEBUG("[Packet_Factory.IP] Content ICMP")
+        break;
+    case P::IP_Protocol::TCP:
+        DEBUG("[Packet_Factory.IP] Content TCP")
+        break;
+    case P::IP_Protocol::EGP:
+        DEBUG("[Packet_Factory.IP] Content EGP")
+        break;
+    case P::IP_Protocol::IGP:
+        DEBUG("[Packet_Factory.IP] Content IGP")
+        break;
+    case P::IP_Protocol::UDP:
+        DEBUG("[Packet_Factory.IP] Content UDP")
+        break;
+    case P::IP_Protocol::OSPF:
+        DEBUG("[Packet_Factory.IP] Content OSPF")
+        break;
+    default:
+        DEBUG("[PAcket_Factory.IP] Content is undefined")
+        break;
+    }
 
     ip_dest = m->get_routing_table().longest_prefix(ip_dest)._via; // On récupère l'ip de la machine nous permettant d'accéder au sous-réseau voulu
     
@@ -71,6 +97,10 @@ Packet* Packet_Factory::IP(Interface& from, Packet::IP::IP_Protocol protocol, IP
     }
     return nullptr;
 };
+
+// Packet* Packet_Factory::UDP(Interface& from, port_t src, port_t dest, P payload) {
+    
+// }
 
 Packet* Packet_Factory::ICMP(Interface& from, IPv4 ip_dest, Packet::ICMP::ICMP_Type type) {
     Packet* icmp = new Packet();
@@ -138,6 +168,21 @@ std::ostream& operator<< (std::ostream& o, const Packet::IP& P) {
     o << IP_Machine::IPv42char(P.dest);
     o << "|" << std::endl;
     if (P.protocol == Packet::IP::IP_Protocol::ICMP) o << P.payload->data.icmp;
+    return o;
+}
+
+std::ostream& operator<< (std::ostream& o, const Packet::UDP& P) {
+    o << "+----------+-----------UDP---------+" << std::endl;
+    o << "| Port src |  ";
+    std::cout.setf(std::ios::left, std::ios::adjustfield);
+    std::cout.width(21);
+    o << IP_Machine::IPv42char(P.src);
+    o << "|" << std::endl
+      << "| Port dst |  ";
+    std::cout.setf(std::ios::left, std::ios::adjustfield);
+    std::cout.width(21);
+    o << IP_Machine::IPv42char(P.dest);
+    o << "|" << std::endl;
     return o;
 }
 

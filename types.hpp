@@ -17,6 +17,7 @@ class IP_Machine;
 typedef uint32_t IPv4;
 typedef __int128_t IPv6;
 typedef uint interface_t;
+typedef uint16_t port_t;
 
 typedef struct CIDR {
     interface_t x:5;

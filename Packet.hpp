@@ -57,11 +57,52 @@ struct Packet {
         friend std::ostream& operator<< (std::ostream& o, const IP& P);
     };
     
+    struct UDP {
+        port_t src;
+        port_t dest;
+        uint16_t length;
+        uint16_t checksum;
+        friend std::ostream& operator<< (std::ostream& o, const UDP& P);
+    };
+
+    struct DHCP {
+        // enum class DHCP_Options = {  };
+        uint8_t OP;
+        uint8_t HTYPE;
+        uint8_t HLEN;
+        uint8_t HOPS;
+        uint32_t XID = 0x3903F326;
+        IPv4 CIADDR;
+        IPv4 YIADDR;
+        IPv4 SIADDR;
+        IPv4 GIADDR;    
+        MAC CHADDR;
+    };
+
+    struct DNS {
+        enum class DNS_QR { Query = 0, Reply = 1 };
+        enum class DNS_Opcode { Query = 0, IQuery = 1, Status = 2, Notify = 4, Update = 5, DSO = 6 };  
+        enum class DNS_Rcode { NOERROR = 0, FORMERR = 1, SERVFAIL = 2, NXDOMAIN = 3 };  
+        DNS_QR type;
+        DNS_Opcode opcode;
+        bool AA;
+        bool TC;
+        bool RD;
+        bool RA;
+        DNS_Rcode rcode;
+        port_t dest;
+        uint16_t length;
+        uint16_t checksum;
+        friend std::ostream& operator<< (std::ostream& o, const UDP& P);
+    };
+
     union Data {
         ETHERNET ethernet;
         ARP arp;
         IP  ip;
         ICMP icmp;
+        UDP udp;
+        DNS dns;
     } data{};
 
     static bool control_TTL(Packet& P);

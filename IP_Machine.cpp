@@ -118,7 +118,7 @@ void IP_Machine::datalink_layer(Packet& P, interface_t from_interface) {
     // Sinon est-ce que nous pouvons le transférer quelque part ? 
     if (P.type == Packet::Type::ETHERNET) { // Il s'agit d'un paquet Ethernet (y'a que ça ici)
         LOG(_label, "arrivé avec le protocole Ethernet")
-        if (as_mac(P.data.ethernet.dest) || (P.data.ethernet.dest == MAC_BROADCAST && P.data.ethernet.src != _interfaces[from_interface]->get_mac())) { // Le paquet m'est destiné: soit directement, soit par broadcast (on check que le broadcast ne provienne pas de nous)
+        if (as_mac(P.data.ethernet.dest) || (P.data.ethernet.dest == MAC_BROADCAST && !as_mac(P.data.ethernet.src))) { // Le paquet m'est destiné: soit directement, soit par broadcast (on check que le broadcast ne provienne pas de nous)
             LOG(_label, "ce paquet est pour moi");
             if (P.data.ethernet.payload != nullptr) {
                 action(*P.data.ethernet.payload, from_interface);
