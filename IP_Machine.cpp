@@ -135,6 +135,8 @@ void IP_Machine::datalink_layer(Packet& P, interface_t from_interface) {
     }
 }
 
+
+
 // Envoie le paquet sur le lien, en fonction de l'adresse MAC de destination 
 void IP_Machine::send(Packet& P) {
     MAC dest = P.data.ethernet.dest;
@@ -181,6 +183,7 @@ void IP_Machine::IP_action(Packet& P, interface_t from_interface) {
     std::cout << IP_Machine::IPv42char(P.data.ip.src) << " a envoyé un paquet IP. On l'a reçu depuis l'interface eth" << from_interface << std::endl;
     if (as_ip(P.data.ip.dest)) { // Si le paquet est destiné à la machine
         if (P.data.ip.protocol == Packet::IP::IP_Protocol::ICMP) ICMP_action(P, from_interface);
+        if (P.data.ip.protocol == Packet::IP::IP_Protocol::UDP) UDP_action(P, from_interface);
     }else{
         LOG(_label, "Ce paquet n'est pas pour moi, je le transfère")
         // TODO: Rempaqueter le paquet reçu et le transférer au prochain routeur
@@ -219,6 +222,17 @@ void IP_Machine::ICMP_action(Packet& P, interface_t from_interface) {
     }
 }
 
+void IP_Machine::UDP_action(Packet& P, interface_t from_interface) {
+    LOG(_label, "c'est un paquet UDP")
+    Packet* udp = P.data.ip.payload;
+    Packet* content = udp->data.udp.payload;
+}
+
+void IP_Machine::DHCP_action(Packet& P, interface_t from_interface) {
+    LOG(_label, "c'est un paquet DHCP")
+    // Packet* dhcp = P.data.
+}
+
 void IP_Machine::add_in_routing_table(IPv4 ip, CIDR mask, uint metric, interface_t interface){
     _routing_table.add_in_table(get_subnet(ip, mask), mask, metric, interface, IP_DEFAULT);
 };
@@ -231,8 +245,15 @@ void IP_Machine::action(Packet& P, interface_t from_interface) {
     case Packet::Type::ARP:
         ARP_action(P, from_interface);
         break;
-    case  Packet::Type::IP:
+    case Packet::Type::IP:
         IP_action(P, from_interface);
+        break;
+    case Packet::Type::UDP:
+        UDP_action(P, from_interface);
+        break;
+    case Packet::Type::DHCP:
+        DHCP_action(P, from_interface);
+        break;
     default:
         break;
     }

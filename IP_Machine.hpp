@@ -19,6 +19,8 @@ private:
     void ARP_action(Packet& P, interface_t from_interface);
     void IP_action(Packet& P, interface_t from_interface);
     void ICMP_action(Packet& P, interface_t from_interface);
+    void UDP_action(Packet& P, interface_t from_interface);
+    void DHCP_action(Packet& P, interface_t from_interface);
     void add_in_routing_table(IPv4 ip, CIDR mask, uint metric, interface_t interface);
     bool as_ip(IPv4 ip);
     bool as_mac(MAC mac);
@@ -43,6 +45,9 @@ public:
     // // -----
     void physical_layer(Packet& P, interface_t from_interface);
     void datalink_layer(Packet& P, interface_t from_interface);
+    void internet_layer(Packet& P, interface_t from_interface);
+    void transport_layer(Packet& P, interface_t from_interface);
+    void application_layer(Packet& P, interface_t from_interface);
 
     void arp();
     void ip_route();

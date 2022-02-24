@@ -63,7 +63,8 @@ int main() {
     C->get_routing_table().add_in_table(IP_DEFAULT, {0}, 1, C_eth0->get_interface_number(), A_IP1);
     
     // Crée un paquet ICMP pour effectuer une requête de ping de C vers B
-    Packet* p = Packet_Factory::ICMP(*C_eth0, B_IP, Packet::ICMP::ICMP_Type::ECHO_req); // 
+    // Packet* p = Packet_Factory::ICMP(*C_eth0, B_IP, Packet::ICMP::ICMP_Type::ECHO_req); // 
+    Packet* p = Packet_Factory::DHCP(*C_eth0, Packet::DHCP::DHCP_Message_Type::Discover, {}, {}, {}, {}, C_MAC); // 
     C->send(*p); // Envoie le paquet sur le réseau
 
     return 0;

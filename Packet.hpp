@@ -10,7 +10,9 @@ struct Packet {
         ETHERNET,
         ARP,
         IP,
-        ICMP
+        ICMP,
+        UDP,
+        DHCP
     } type = Type::ETHERNET;
 
     // Réprésente une trame Ethernet
@@ -60,23 +62,30 @@ struct Packet {
     struct UDP {
         port_t src;
         port_t dest;
-        uint16_t length;
-        uint16_t checksum;
+        uint16_t length = 0;
+        uint16_t checksum = 0;
+        Packet* payload;
+        UDP(port_t src, port_t dest, Packet* payload) : src(src), dest(dest), payload(payload) {};
         friend std::ostream& operator<< (std::ostream& o, const UDP& P);
     };
 
     struct DHCP {
-        // enum class DHCP_Options = {  };
-        uint8_t OP;
-        uint8_t HTYPE;
-        uint8_t HLEN;
-        uint8_t HOPS;
+        enum class DHCP_Message_Type { Discover = 1, Offer = 2, Request = 3, Decline = 4, ACK = 5, NAK = 6, Release = 7, Inform = 8 };
+        DHCP_Message_Type message_type;
+        // uint8_t OP; // Operation Code: Specifies the general type of message. A value of 1 indicates a request message, while a value of 2 is a reply message.
+        // uint8_t HTYPE;
+        // uint8_t HLEN;
+        // uint8_t HOPS;
         uint32_t XID = 0x3903F326;
-        IPv4 CIADDR;
-        IPv4 YIADDR;
-        IPv4 SIADDR;
-        IPv4 GIADDR;    
-        MAC CHADDR;
+        IPv4 CIADDR; // Client IP
+        IPv4 YIADDR; // Your IP
+        IPv4 SIADDR; // Server IP
+        IPv4 GIADDR; // Gateway IP
+        MAC CHADDR;  // Client MAC
+        // std::string SNAME; // Nom du serveur
+        DHCP(DHCP_Message_Type type, IPv4 C, IPv4 Y, IPv4 S, IPv4 G, MAC M) 
+            : message_type(type), CIADDR(C), YIADDR(Y), SIADDR(S), GIADDR(G), CHADDR(M) {};
+        friend std::ostream& operator<< (std::ostream& o, const DHCP& P);
     };
 
     struct DNS {
@@ -103,6 +112,7 @@ struct Packet {
         ICMP icmp;
         UDP udp;
         DNS dns;
+        DHCP dhcp;
     } data{};
 
     static bool control_TTL(Packet& P);
@@ -110,6 +120,7 @@ struct Packet {
         if (P.type == Packet::Type::ETHERNET)   o << P.data.ethernet;
         if (P.type == Packet::Type::ARP)        o << P.data.arp;
         if (P.type == Packet::Type::IP)         o << P.data.ip;
+        if (P.type == Packet::Type::DHCP)       o << P.data.dhcp;
         return o;
     }
 };
@@ -120,6 +131,9 @@ public:
     static Packet* ARP(IP_Machine& from, Packet::ARP::ARP_Opcode opcode, MAC mac_sender, IPv4 ip_sender, MAC mac_target, IPv4 ip_target);
     static Packet* IP(Interface& from, Packet::IP::IP_Protocol protocol, IPv4 ip_dest, Packet* payload);
     static Packet* ICMP(Interface& from, IPv4 ip_dest, Packet::ICMP::ICMP_Type type);
+    static Packet* UDP(Interface& from, IPv4 ip_dest, port_t src, port_t dest, Packet* payload);
+    static Packet* DHCP(Interface& from, Packet::DHCP::DHCP_Message_Type type, IPv4 C, IPv4 Y, IPv4 S, IPv4 G, MAC M);
+
 };
 
 #endif

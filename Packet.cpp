@@ -98,9 +98,12 @@ Packet* Packet_Factory::IP(Interface& from, Packet::IP::IP_Protocol protocol, IP
     return nullptr;
 };
 
-// Packet* Packet_Factory::UDP(Interface& from, port_t src, port_t dest, P payload) {
-    
-// }
+Packet* Packet_Factory::UDP(Interface& from, IPv4 ip_dest, port_t src, port_t dest, Packet* payload) {
+    Packet* udp = new Packet();
+    udp->type = Packet::Type::UDP;
+    udp->data.udp = Packet::UDP(src, dest, payload);
+    return Packet_Factory::IP(from, Packet::IP::IP_Protocol::UDP, ip_dest, udp);
+}
 
 Packet* Packet_Factory::ICMP(Interface& from, IPv4 ip_dest, Packet::ICMP::ICMP_Type type) {
     Packet* icmp = new Packet();
@@ -110,14 +113,27 @@ Packet* Packet_Factory::ICMP(Interface& from, IPv4 ip_dest, Packet::ICMP::ICMP_T
     return Packet_Factory::IP(from, Packet::IP::IP_Protocol::ICMP, ip_dest, icmp);
 };
 
+Packet* Packet_Factory::DHCP(Interface& from, Packet::DHCP::DHCP_Message_Type type, IPv4 C, IPv4 Y, IPv4 S, IPv4 G, MAC M) {
+    Packet* dhcp = new Packet();
+    dhcp->type = Packet::Type::DHCP;
+    dhcp->data.dhcp = Packet::DHCP(type, C, Y, S, G, M);
+    Packet* res;
+    if (type == Packet::DHCP::DHCP_Message_Type::Discover)  res = Packet_Factory::UDP(from, IP_Machine::char2IPv4("255.255.255.255"), 68, 67, dhcp);
+    if (type == Packet::DHCP::DHCP_Message_Type::Offer)     res = Packet_Factory::UDP(from, IP_Machine::char2IPv4("255.255.255.255"), 67, 68, dhcp);
+    if (type == Packet::DHCP::DHCP_Message_Type::Request)   res = Packet_Factory::UDP(from, IP_Machine::char2IPv4("255.255.255.255"), 68, 67, dhcp);
+    if (type == Packet::DHCP::DHCP_Message_Type::ACK)       res = Packet_Factory::UDP(from, IP_Machine::char2IPv4("255.255.255.255"), 67, 68, dhcp);
+    std::cout << res->data.ethernet.dest << std::endl;
+    return res;
+};
+
 
 std::ostream& operator<< (std::ostream& o, const Packet::ETHERNET& P) {
     o << "+----------+-------Ethernet--------+" << std::endl
       << "| MAC src  |  " << IP_Machine::MAC2char(P.src)  << "    |" << std::endl
       << "| MAC dest |  " << IP_Machine::MAC2char(P.dest) << "    |" << std::endl
       << "| EtherType|  " << ((P.type == Packet::ETHERNET::EtherType::IP) ? "IP  " : "ARP ") << "                 |" << std::endl;
-      if (P.type == Packet::ETHERNET::EtherType::ARP) o << P.payload->data.arp << std::endl;
-      else if (P.type == Packet::ETHERNET::EtherType::IP) o << P.payload->data.ip << std::endl;
+      if (P.type == Packet::ETHERNET::EtherType::ARP) o << P.payload->data.arp;
+      else if (P.type == Packet::ETHERNET::EtherType::IP) o << P.payload->data.ip;
       o << "+----------+-----------------------+";
     return o;
 }
@@ -135,7 +151,7 @@ std::ostream& operator<< (std::ostream& o, const Packet::ARP& P) {
         << "| IP dest  |  ";
     std::cout.setf(std::ios::left, std::ios::adjustfield);
     std::cout.width(21);
-    o << IP_Machine::IPv42char(P.ip_target) << "|";
+    o << IP_Machine::IPv42char(P.ip_target) << "|" << std::endl;
     return o;
 }
 
@@ -147,7 +163,7 @@ std::ostream& operator<< (std::ostream& o, const Packet::ICMP& I) {
       std::cout.width(23);
     if (I.type == Packet::ICMP::ICMP_Type::ECHO_req) o << "Requête d'écho";
     if (I.type == Packet::ICMP::ICMP_Type::ECHO_res) o << "Réponse d'écho";
-    o << "|";
+    o << "|" << std::endl;
         return o;
 }
 
@@ -168,6 +184,7 @@ std::ostream& operator<< (std::ostream& o, const Packet::IP& P) {
     o << IP_Machine::IPv42char(P.dest);
     o << "|" << std::endl;
     if (P.protocol == Packet::IP::IP_Protocol::ICMP) o << P.payload->data.icmp;
+    else if (P.protocol == Packet::IP::IP_Protocol::UDP) o << P.payload->data.udp;
     return o;
 }
 
@@ -176,12 +193,43 @@ std::ostream& operator<< (std::ostream& o, const Packet::UDP& P) {
     o << "| Port src |  ";
     std::cout.setf(std::ios::left, std::ios::adjustfield);
     std::cout.width(21);
-    o << IP_Machine::IPv42char(P.src);
+    o << P.src;
     o << "|" << std::endl
       << "| Port dst |  ";
     std::cout.setf(std::ios::left, std::ios::adjustfield);
     std::cout.width(21);
-    o << IP_Machine::IPv42char(P.dest);
+    o << P.dest;
+    o << "|" << std::endl;
+    if (P.payload->type == Packet::Type::DHCP) o << P.payload->data.dhcp;
+    return o;
+}
+
+std::ostream& operator<< (std::ostream& o, const Packet::DHCP& P) {
+    o << "+----------+----------DHCP---------+" << std::endl;
+    o << "|  CiAddr  |  ";
+    std::cout.setf(std::ios::left, std::ios::adjustfield);
+    std::cout.width(21);
+    o << P.CIADDR;
+    o << "|" << std::endl;
+    o << "|  YiAddr  |  ";
+    std::cout.setf(std::ios::left, std::ios::adjustfield);
+    std::cout.width(21);
+    o << P.YIADDR;
+    o << "|" << std::endl;
+    o << "|  SiAddr  |  ";
+    std::cout.setf(std::ios::left, std::ios::adjustfield);
+    std::cout.width(21);
+    o << P.SIADDR;
+    o << "|" << std::endl;
+    o << "|  GiAddr  |  ";
+    std::cout.setf(std::ios::left, std::ios::adjustfield);
+    std::cout.width(21);
+    o << P.GIADDR;
+    o << "|" << std::endl;
+    o << "|  ChAddr  |  ";
+    std::cout.setf(std::ios::left, std::ios::adjustfield);
+    std::cout.width(21);
+    o << IP_Machine::MAC2char(P.CHADDR);
     o << "|" << std::endl;
     return o;
 }

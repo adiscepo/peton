@@ -87,7 +87,7 @@ public:
     friend std::ostream& operator<<(std::ostream& o, const Routing_Table& R);
 };
 
-enum class ARP_OPCODE {
+enum class ARP_Opcode {
     REQUEST = 1,
     RESPONSE = 2
 };
