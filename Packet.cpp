@@ -114,16 +114,36 @@ Packet* Packet_Factory::ICMP(Interface& from, IPv4 ip_dest, Packet::ICMP::ICMP_T
 };
 
 Packet* Packet_Factory::DHCP(Interface& from, Packet::DHCP::DHCP_Message_Type type, IPv4 C, IPv4 Y, IPv4 S, IPv4 G, MAC M) {
+    // Informations du paquet
+    port_t p_src, p_dest;
+    IPv4 ip_src = IP_Machine::char2IPv4("0.0.0.0");
+    IPv4 ip_dest = IP_Machine::char2IPv4("255.255.255.255");
+    MAC mac_src = from.get_mac();
+    MAC mac_dest = MAC_BROADCAST;
+    if (type == Packet::DHCP::DHCP_Message_Type::Discover || type == Packet::DHCP::DHCP_Message_Type::Request) { p_src = 67; p_dest = 68; } 
+    if (type == Packet::DHCP::DHCP_Message_Type::Offer || type == Packet::DHCP::DHCP_Message_Type::ACK) { p_src = 67; p_dest = 68; mac_dest = M; ip_src = from.get_ip(); } 
+    // Création du paquet 
     Packet* dhcp = new Packet();
     dhcp->type = Packet::Type::DHCP;
     dhcp->data.dhcp = Packet::DHCP(type, C, Y, S, G, M);
-    Packet* res;
-    if (type == Packet::DHCP::DHCP_Message_Type::Discover)  res = Packet_Factory::UDP(from, IP_Machine::char2IPv4("255.255.255.255"), 68, 67, dhcp);
-    if (type == Packet::DHCP::DHCP_Message_Type::Offer)     res = Packet_Factory::UDP(from, IP_Machine::char2IPv4("255.255.255.255"), 67, 68, dhcp);
-    if (type == Packet::DHCP::DHCP_Message_Type::Request)   res = Packet_Factory::UDP(from, IP_Machine::char2IPv4("255.255.255.255"), 68, 67, dhcp);
-    if (type == Packet::DHCP::DHCP_Message_Type::ACK)       res = Packet_Factory::UDP(from, IP_Machine::char2IPv4("255.255.255.255"), 67, 68, dhcp);
-    std::cout << res->data.ethernet.dest << std::endl;
-    return res;
+    Packet* udp = new Packet();
+    udp->type = Packet::Type::UDP;
+    udp->data.udp.payload = dhcp;
+    udp->data.udp.src = p_src;
+    udp->data.udp.dest = p_dest;
+    Packet* ip = new Packet();
+    ip->type = Packet::Type::IP;
+    ip->data.ip.src  = ip_src;
+    ip->data.ip.dest = ip_dest;
+    ip->data.ip.protocol = Packet::IP::IP_Protocol::UDP;
+    ip->data.ip.payload = udp;
+    Packet* ethernet = new Packet();
+    ethernet->type = Packet::Type::ETHERNET;
+    ethernet->data.ethernet.type = Packet::ETHERNET::EtherType::IP; 
+    ethernet->data.ethernet.src = mac_src; 
+    ethernet->data.ethernet.dest = mac_dest;
+    ethernet->data.ethernet.payload = ip;
+    return ethernet;
 };
 
 
@@ -206,6 +226,18 @@ std::ostream& operator<< (std::ostream& o, const Packet::UDP& P) {
 
 std::ostream& operator<< (std::ostream& o, const Packet::DHCP& P) {
     o << "+----------+----------DHCP---------+" << std::endl;
+    o << "|   Type   |  ";
+    std::cout.setf(std::ios::left, std::ios::adjustfield);
+    std::cout.width(21);
+    if (P.message_type == Packet::DHCP::DHCP_Message_Type::Discover) o <<  "Discover";
+    else if (P.message_type == Packet::DHCP::DHCP_Message_Type::Request) o <<  "Request";
+    else if (P.message_type == Packet::DHCP::DHCP_Message_Type::Offer) o <<  "Offer";
+    else if (P.message_type == Packet::DHCP::DHCP_Message_Type::Decline) o <<  "Decline";
+    else if (P.message_type == Packet::DHCP::DHCP_Message_Type::Release) o <<  "Release";
+    else if (P.message_type == Packet::DHCP::DHCP_Message_Type::ACK) o <<  "ACK";
+    else if (P.message_type == Packet::DHCP::DHCP_Message_Type::NAK) o <<  "NAK";
+    else if (P.message_type == Packet::DHCP::DHCP_Message_Type::Inform) o <<  "Inform";
+    o << "|" << std::endl;
     o << "|  CiAddr  |  ";
     std::cout.setf(std::ios::left, std::ios::adjustfield);
     std::cout.width(21);

@@ -4,7 +4,7 @@
 
 void Link::forward(Packet& packet, Basic_Interface& from) {
     Basic_Interface* to = get_interface_connected_to(from);
-    DEBUG(packet)
+    // DEBUG(packet)
     // if (packet.get_type() == Packet::ETHERTHYPE::IP) std::cout << "Envoi d'un paquet IP de " << from->get_label() << " à " << to->get_label() << std::endl;
     // if (packet.get_type() == Packet::ETHERTHYPE::ARP) std::cout << "Envoi d'un paquet ARP de " << from->get_label() << " à " << to->get_label() << std::endl;
     // std::cout << "+-----------------------------+" << std::endl;
