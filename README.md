@@ -68,8 +68,8 @@ L'IP de la machine C a été obtenue grâce au protocole DHCP.
 Dans l'exemple: C envoie un paquet ICMP (ping) vers B.
 
 Faronti
- [x] UDP
- [x] DHCP (Permet une connexion plus Plug&Play entre les machines)
- [] DNS
- [] TCP
- [] HTTP
+ - [x] UDP
+ - [x] DHCP (Permet une connexion plus Plug&Play entre les machines)
+ - [ ] DNS
+ - [ ] TCP
+ - [ ] HTTP
