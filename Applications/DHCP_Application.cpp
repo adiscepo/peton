@@ -8,7 +8,6 @@
 struct DHCPAllIPsAssigned : public std::exception { const char * what () const throw () { return "All addressables IP of the subnet were attribued. There is no more IP available."; } };
 
 void DHCP_Application::socket(Packet& P, interface_t from_interface) {
-    std::cout << "[DHCP Server]" << std::endl;
     switch (P.data.dhcp.options.message_type) {
     case Packet::DHCP::DHCP_Message_Type::Discover:
         discover(P, from_interface);
@@ -63,8 +62,9 @@ void DHCP_Application::request(Packet& P, interface_t from_interface) {
     LOG("DHCP Server", "Requête de requête reçue.")
     _assigned_ip.insert({P.data.dhcp.CIADDR, P.data.dhcp.CHADDR});
     Packet* res = Packet_Factory::DHCP(_connected.interface(from_interface), Packet::DHCP::DHCP_Message_Type::ACK, {}, P.data.dhcp.CIADDR, _router_ip, {}, P.data.dhcp.CHADDR);
-    res->data.dhcp.options.router = _router_ip;
-    res->data.dhcp.options.subnet_mask = _subnet_mask;
+    // TODO: trouver une méthode plus efficace pour modifier les valeurs
+    res->data.ethernet.payload->data.ip.payload->data.udp.payload->data.dhcp.options.router = _router_ip;
+    res->data.ethernet.payload->data.ip.payload->data.udp.payload->data.dhcp.options.subnet_mask = _subnet_mask;
     send(*res);
     delete res;
 };
@@ -75,11 +75,10 @@ void DHCP_Application::decline(Packet& P, interface_t from_interface) {
 
 void DHCP_Application::ack(Packet& P, interface_t from_interface) {
     LOG("DHCP Client", "Requête d'acquittement reçue.")
-    Interface* new_interface = new Interface(_connected, from_interface, P.data.dhcp.CHADDR, P.data.dhcp.YIADDR, P.data.dhcp.options.subnet_mask);
-    SHOW_IP(P.data.dhcp.YIADDR);
     _connected.get_routing_table().add_in_table(get_subnet_part(P.data.dhcp.options.router, P.data.dhcp.options.subnet_mask), P.data.dhcp.options.subnet_mask, 0, from_interface, P.data.dhcp.options.router);
-    _connected.set_interface(*new_interface);
-    _connected.ip_route();
+    Interface& inter = _connected.interface(from_interface);
+    inter.set_IP(P.data.dhcp.YIADDR);
+    inter.set_cidr(P.data.dhcp.options.subnet_mask);
 };
 
 void DHCP_Application::nak(Packet& P, interface_t from_interface) {

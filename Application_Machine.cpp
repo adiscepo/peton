@@ -34,9 +34,39 @@ void Application_Machine::runDHCP(interface_t on_interface) {
     add_application(dhcp, 67); // Lance un client DHCP sur le port 67
     Interface& inter = interface(on_interface);
     Packet* p = Packet_Factory::DHCP(inter, Packet::DHCP::DHCP_Message_Type::Discover, {}, {}, {}, {}, inter.get_mac());
-    p->data.ethernet.payload->data.ip.payload->data.udp.payload->data.dhcp.options.address_request = IP_Machine::char2IPv4("10.0.1.166");
     inter.send(*p);
     LOG(_label, "éteint le client DHCP")
     kill_application(67);
     delete dhcp;
+}
+
+void Application_Machine::runDHCP(interface_t on_interface, IPv4 ip) {
+    LOG(_label, "lance un client DHCP")
+    Application* dhcp = new DHCP_Application(*this);
+    add_application(dhcp, 67); // Lance un client DHCP sur le port 67
+    Interface& inter = interface(on_interface);
+    Packet* p = Packet_Factory::DHCP(inter, Packet::DHCP::DHCP_Message_Type::Discover, {}, {}, {}, {}, inter.get_mac());
+    p->data.ethernet.payload->data.ip.payload->data.udp.payload->data.dhcp.options.address_request = ip; // Je veux cette ip spécifiquement
+    inter.send(*p);
+    LOG(_label, "éteint le client DHCP")
+    kill_application(67);
+    delete dhcp;
+}
+
+std::ostream& operator << (std::ostream& o, const Application_Machine &A) {
+    operator<<(o, dynamic_cast<IP_Machine&>(const_cast<Application_Machine&>(A)));
+    o << std::endl;
+    o << "+-------------------------Applications--------------------------+" << std::endl;
+    if (A._applications.size() != 0) {
+        for (auto app : A._applications) {
+            o << "| ";
+            std::cout.setf(std::ios::left, std::ios::adjustfield);
+            std::cout.width(62);
+            o << app.second->get_type() << "|" << std::endl;
+        }
+    } else {
+        o << "|           Aucune application ne tourne actuellement           |" << std::endl;
+    }
+    o << "+---------------------------------------------------------------+";
+    return o;
 }

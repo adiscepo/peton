@@ -84,6 +84,7 @@ IP_Machine::IP_Machine(bool forward, std::vector<Interface*> interfaces) : _labe
     {for (auto elem: interfaces) _interfaces.insert({elem->get_interface_number(), elem}); IP_Machine::total += 1; };
 
 void IP_Machine::set_interface(Interface& interface) {
+    LOG(_label, "a une nouvelle interface connectée")
     _interfaces[interface.get_interface_number()] = &interface;
 }
 
@@ -258,13 +259,36 @@ void IP_Machine::ip_route(){
 }
 
 std::ostream& operator << (std::ostream& o, const IP_Machine &I) {
-    o << "La machine " << I._label << " a " << I._interfaces.size() << " interfaces:"; 
+    o << "+-------------------------------[" << I._label << "]-----------------------------+" << std::endl;
+    o << "| Interface |       IP        |        MAC        | connectée à |" << std::endl;
+    o << "+-----------+-----------------+-------------------+-------------+" << std::endl;
     for (auto interface: I._interfaces) {
         if (interface.second != nullptr) {
-            o << "\n - eth" << interface.second->get_interface_number() << " connectée à " << interface.second->get_link()->get_interface_connected_to(*interface.second)->get_machine()->get_label();
+            o << "| eth";
+            std::cout.setf(std::ios::left, std::ios::adjustfield);
+            std::cout.width(7);
+            o << interface.second->get_interface_number();
+            o << "| ";
+            std::cout.setf(std::ios::left, std::ios::adjustfield);
+            std::cout.width(16);
+            o << IP_Machine::IPv42char(interface.second->get_ip());
+            o << "| ";
+            std::cout.setf(std::ios::left, std::ios::adjustfield);
+            std::cout.width(18);
+            o << IP_Machine::MAC2char(interface.second->get_mac());
+            o << "| ";
+            std::cout.setf(std::ios::left, std::ios::adjustfield);
+            std::cout.width(12);
+            o << interface.second->get_link()->get_interface_connected_to(*interface.second)->get_machine()->get_label();
+            o << "|" << std::endl;
         }else{
-            o << "\n - eth" << interface.second->get_interface_number() << " n'est pas connectée";
+            o << "| eth" << interface.second->get_interface_number() << " | ";
+            std::cout.setf(std::ios::left, std::ios::adjustfield);
+            std::cout.width(24);
+            o << " n'est pas connectée";
+            o << " |" << std::endl;
         }
     }
+    o << "+-----------+-----------------+-------------------+-------------+";
     return o;
 }

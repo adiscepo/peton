@@ -42,8 +42,6 @@ bool Basic_Interface::receipt(Packet& P) {
 // Méthodes
 
 std::ostream& operator<< (std::ostream& o, const Interface& I){
-    o << IP_Machine::IPv42char(I._ip) << "/" << I._cidr << std::endl
-      << IP_Machine::MAC2char(I._mac) << std::endl
-      << "connecte à " << I._connected->get_label();
+    o << IP_Machine::IPv42char(I._ip) << "/" << I._cidr << IP_Machine::MAC2char(I._mac) << "connecte à " << I._connected->get_label();
     return o;
 };

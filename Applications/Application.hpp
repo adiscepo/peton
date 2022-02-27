@@ -6,6 +6,7 @@
 
 class Application {
 protected:
+    std::string _type = "Application";
     // port_t _port;
     IP_Machine& _connected;
 public:
@@ -13,6 +14,7 @@ public:
     Application(IP_Machine& machine) : _connected(machine) {};
     virtual void socket(Packet& P, interface_t from_interface) = 0;
     void send(Packet& P) { _connected.send(P); }
+    std::string get_type() { return _type; }
     virtual ~Application() noexcept = default;
 };
 

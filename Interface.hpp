@@ -21,11 +21,14 @@ public:
     
     inline bool is_linked() { return !(_linked_to == nullptr); }
     inline void set_link(Link* l) { _linked_to = l; }
+    
     inline IP_Machine* get_machine() { return _connected; }
     inline MAC get_mac() { return _mac; }
     inline Link* get_link() { return _linked_to; }
     inline interface_t get_interface_number() { return _interface; }
     
+    inline void set_MAC(MAC mac) {_mac = mac;}
+
     bool send(Packet& P);
     bool receipt(Packet& P);
 
@@ -47,8 +50,12 @@ public:
     Interface(IP_Machine& M, interface_t interface, MAC mac, Link* l, IPv4 ip, CIDR cidr) : Basic_Interface(M, interface, mac, l), _ip(ip), _cidr(cidr) {};
     inline IPv4 get_ip() { return _ip; }
     inline CIDR get_cidr() { return _cidr; }
-    ~Interface() override = default;
 
+    inline void set_IP(IPv4 ip) {_ip = ip;}
+    inline void set_cidr(CIDR cidr) {_cidr = cidr;}
+
+    ~Interface() override = default;
+    
     friend std::ostream& operator << (std::ostream& o, const Interface& I);
 };
 

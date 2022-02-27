@@ -22,8 +22,8 @@ class DHCP_Application : public Application {
 
     IPv4 generate_ip();
 public:
-    DHCP_Application() noexcept = default;
-    DHCP_Application(IP_Machine& machine) : Application::Application(machine) {};
+    // DHCP_Application() = default;
+    DHCP_Application(IP_Machine& machine) : Application::Application(machine) { Application::_type = "DHCP Application"; };
     
     void configure(IPv4 router_ip, CIDR subnet_mask) {_router_ip = router_ip; _subnet_mask = subnet_mask;}
 

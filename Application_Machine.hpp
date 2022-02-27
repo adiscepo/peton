@@ -18,11 +18,15 @@ public:
     void kill_application(port_t port) {_applications.erase(port);}
     
     void runDHCP(interface_t interface); // Permet d'obtenir toutes les infos sur notre réseau et d'obtenir une IP
+    void runDHCP(interface_t interface, IPv4 ip); // Permet d'obtenir toutes les infos sur notre réseau et d'obtenir une IP
 
     void transport_layer(Packet& P, interface_t from_interface);
     void application_layer(Packet& P, interface_t from_interface, port_t port);
 
     virtual ~Application_Machine() override = default;
+
+
+    friend std::ostream& operator << (std::ostream& o, const Application_Machine& A);
 };
 
 #endif
