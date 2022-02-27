@@ -30,11 +30,12 @@ void Application_Machine::application_layer(Packet& P, interface_t from_interfac
 
 void Application_Machine::runDHCP(interface_t on_interface) {
     LOG(_label, "lance un client DHCP")
-    Application* dhcp = new DHCP_Application(*this);
+    Application* dhcp = new DHCP_Application(*this, on_interface);
     add_application(dhcp, 67); // Lance un client DHCP sur le port 67
     Interface& inter = interface(on_interface);
     Packet* p = Packet_Factory::DHCP(inter, Packet::DHCP::DHCP_Message_Type::Discover, {}, {}, {}, {}, inter.get_mac());
     inter.send(*p);
+    if (inter.get_ip() == IP_Machine::char2IPv4("0.0.0.0")) DEBUG("Aucune IP reçue, aucun serveur DHCP n'a l'air de tourner sur notre sous-réseau...")
     LOG(_label, "éteint le client DHCP")
     kill_application(67);
     delete dhcp;
@@ -42,7 +43,7 @@ void Application_Machine::runDHCP(interface_t on_interface) {
 
 void Application_Machine::runDHCP(interface_t on_interface, IPv4 ip) {
     LOG(_label, "lance un client DHCP")
-    Application* dhcp = new DHCP_Application(*this);
+    Application* dhcp = new DHCP_Application(*this, on_interface);
     add_application(dhcp, 67); // Lance un client DHCP sur le port 67
     Interface& inter = interface(on_interface);
     Packet* p = Packet_Factory::DHCP(inter, Packet::DHCP::DHCP_Message_Type::Discover, {}, {}, {}, {}, inter.get_mac());

@@ -8,21 +8,23 @@
 struct DHCPAllIPsAssigned : public std::exception { const char * what () const throw () { return "All addressables IP of the subnet were attribued. There is no more IP available."; } };
 
 void DHCP_Application::socket(Packet& P, interface_t from_interface) {
-    switch (P.data.dhcp.options.message_type) {
-    case Packet::DHCP::DHCP_Message_Type::Discover:
-        discover(P, from_interface);
-        break;
-    case Packet::DHCP::DHCP_Message_Type::Request:
-        request(P, from_interface);
-        break;
-    case Packet::DHCP::DHCP_Message_Type::Offer:
-        offer(P, from_interface);
-        break;
-    case Packet::DHCP::DHCP_Message_Type::ACK:
-        ack(P, from_interface);
-        break;
-    default:
-        break;
+    if (from_interface == _run_on_interface) { // Si le paquet reçu vient bien de l'interface pour laquelle tourne le serveur DHCP
+        switch (P.data.dhcp.options.message_type) {
+        case Packet::DHCP::DHCP_Message_Type::Discover:
+            discover(P, from_interface);
+            break;
+        case Packet::DHCP::DHCP_Message_Type::Request:
+            request(P, from_interface);
+            break;
+        case Packet::DHCP::DHCP_Message_Type::Offer:
+            offer(P, from_interface);
+            break;
+        case Packet::DHCP::DHCP_Message_Type::ACK:
+            ack(P, from_interface);
+            break;
+        default:
+            break;
+        }
     }
 }
 

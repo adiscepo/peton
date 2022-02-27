@@ -10,7 +10,8 @@ class DHCP_Application : public Application {
     IPv4 _domaine_server_name;
     IPv4 _broadcast_ip;
     std::map<IPv4, MAC> _assigned_ip = {};
-    
+    interface_t _run_on_interface;
+
     void discover(Packet& P, interface_t from_interface);
     void offer(Packet& P, interface_t from_interface);
     void request(Packet& P, interface_t from_interface);
@@ -22,8 +23,7 @@ class DHCP_Application : public Application {
 
     IPv4 generate_ip();
 public:
-    // DHCP_Application() = default;
-    DHCP_Application(IP_Machine& machine) : Application::Application(machine) { Application::_type = "DHCP Application"; };
+    DHCP_Application(IP_Machine& machine, interface_t interface) : Application::Application(machine), _run_on_interface(interface) { Application::_type = "DHCP Application"; };
     
     void configure(IPv4 router_ip, CIDR subnet_mask) {_router_ip = router_ip; _subnet_mask = subnet_mask;}
 

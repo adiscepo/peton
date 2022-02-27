@@ -187,7 +187,7 @@ void IP_Machine::ARP_action(Packet& P, interface_t from_interface) {
 }
 
 void IP_Machine::IP_action(Packet& P, interface_t from_interface) {
-    std::cout << IP_Machine::IPv42char(P.data.ip.src) << " a envoyé un paquet IP. On l'a reçu depuis l'interface eth" << from_interface << std::endl;
+    // std::cout << IP_Machine::IPv42char(P.data.ip.src) << " a envoyé un paquet IP. On l'a reçu depuis l'interface eth" << from_interface << std::endl;
     if (as_ip(P.data.ip.dest) || is_IP_broadcast(P.data.ip.dest, _interfaces[from_interface]->get_cidr())) { // Si le paquet est destiné à la machine
         LOG(_label, "Ce paquet IP est pour moi, je l'ouvre")
         action(P, from_interface);
@@ -263,30 +263,27 @@ std::ostream& operator << (std::ostream& o, const IP_Machine &I) {
     o << "| Interface |       IP        |        MAC        | connectée à |" << std::endl;
     o << "+-----------+-----------------+-------------------+-------------+" << std::endl;
     for (auto interface: I._interfaces) {
-        if (interface.second != nullptr) {
-            o << "| eth";
-            std::cout.setf(std::ios::left, std::ios::adjustfield);
-            std::cout.width(7);
-            o << interface.second->get_interface_number();
-            o << "| ";
-            std::cout.setf(std::ios::left, std::ios::adjustfield);
-            std::cout.width(16);
-            o << IP_Machine::IPv42char(interface.second->get_ip());
-            o << "| ";
-            std::cout.setf(std::ios::left, std::ios::adjustfield);
-            std::cout.width(18);
-            o << IP_Machine::MAC2char(interface.second->get_mac());
-            o << "| ";
-            std::cout.setf(std::ios::left, std::ios::adjustfield);
-            std::cout.width(12);
+        o << "| eth";
+        std::cout.setf(std::ios::left, std::ios::adjustfield);
+        std::cout.width(7);
+        o << interface.second->get_interface_number();
+        o << "| ";
+        std::cout.setf(std::ios::left, std::ios::adjustfield);
+        std::cout.width(16);
+        o << IP_Machine::IPv42char(interface.second->get_ip());
+        o << "| ";
+        std::cout.setf(std::ios::left, std::ios::adjustfield);
+        std::cout.width(18);
+        o << IP_Machine::MAC2char(interface.second->get_mac());
+        o << "| ";
+        std::cout.setf(std::ios::left, std::ios::adjustfield);
+        std::cout.width(12);
+        if (interface.second->is_linked()) {
             o << interface.second->get_link()->get_interface_connected_to(*interface.second)->get_machine()->get_label();
             o << "|" << std::endl;
         }else{
-            o << "| eth" << interface.second->get_interface_number() << " | ";
-            std::cout.setf(std::ios::left, std::ios::adjustfield);
-            std::cout.width(24);
-            o << " n'est pas connectée";
-            o << " |" << std::endl;
+            o << " NON";
+            o << "|" << std::endl;
         }
     }
     o << "+-----------+-----------------+-------------------+-------------+";

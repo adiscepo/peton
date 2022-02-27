@@ -297,6 +297,30 @@ Machine.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/peton.dir/build.make CMakeFiles/peton.dir/Machine.cpp.s
 .PHONY : Machine.cpp.s
 
+Machine_Factory.o: Machine_Factory.cpp.o
+.PHONY : Machine_Factory.o
+
+# target to build an object file
+Machine_Factory.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/peton.dir/build.make CMakeFiles/peton.dir/Machine_Factory.cpp.o
+.PHONY : Machine_Factory.cpp.o
+
+Machine_Factory.i: Machine_Factory.cpp.i
+.PHONY : Machine_Factory.i
+
+# target to preprocess a source file
+Machine_Factory.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/peton.dir/build.make CMakeFiles/peton.dir/Machine_Factory.cpp.i
+.PHONY : Machine_Factory.cpp.i
+
+Machine_Factory.s: Machine_Factory.cpp.s
+.PHONY : Machine_Factory.s
+
+# target to generate assembly for a file
+Machine_Factory.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/peton.dir/build.make CMakeFiles/peton.dir/Machine_Factory.cpp.s
+.PHONY : Machine_Factory.cpp.s
+
 Packet.o: Packet.cpp.o
 .PHONY : Packet.o
 
@@ -399,6 +423,9 @@ help:
 	@echo "... Machine.o"
 	@echo "... Machine.i"
 	@echo "... Machine.s"
+	@echo "... Machine_Factory.o"
+	@echo "... Machine_Factory.i"
+	@echo "... Machine_Factory.s"
 	@echo "... Packet.o"
 	@echo "... Packet.i"
 	@echo "... Packet.s"

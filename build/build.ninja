@@ -12,7 +12,7 @@
 
 # =============================================================================
 # Project: Peton
-# Configurations: Debug
+# Configurations: Release
 # =============================================================================
 
 #############################################
@@ -24,7 +24,7 @@ ninja_required_version = 1.5
 #############################################
 # Set configuration variable for custom commands.
 
-CONFIGURATION = Debug
+CONFIGURATION = Release
 # =============================================================================
 # Include auxiliary files.
 
@@ -49,63 +49,69 @@ cmake_ninja_workdir = /home/zandies/Dokumentoj/Kodingo/peton/build/
 
 build cmake_object_order_depends_target_peton: phony || CMakeFiles/peton.dir
 
-build CMakeFiles/peton.dir/main.cpp.o: CXX_COMPILER__peton_Debug /home/zandies/Dokumentoj/Kodingo/peton/main.cpp || cmake_object_order_depends_target_peton
+build CMakeFiles/peton.dir/main.cpp.o: CXX_COMPILER__peton_Release /home/zandies/Dokumentoj/Kodingo/peton/main.cpp || cmake_object_order_depends_target_peton
   DEP_FILE = CMakeFiles/peton.dir/main.cpp.o.d
-  FLAGS = -fcoroutines -fconcepts -pthread -fopenacc -fopenmp -ggdb3 -Wpedantic -Wall -Wextra -Wconversion -Wsign-conversion -Weffc++ -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-override -g -std=gnu++20
+  FLAGS = -fcoroutines -fconcepts -pthread -fopenacc -fopenmp -ggdb3 -Wpedantic -Wall -Wextra -Wconversion -Wsign-conversion -Weffc++ -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-override -O3 -DNDEBUG -std=gnu++20
   OBJECT_DIR = CMakeFiles/peton.dir
   OBJECT_FILE_DIR = CMakeFiles/peton.dir
 
-build CMakeFiles/peton.dir/Machine.cpp.o: CXX_COMPILER__peton_Debug /home/zandies/Dokumentoj/Kodingo/peton/Machine.cpp || cmake_object_order_depends_target_peton
+build CMakeFiles/peton.dir/Machine.cpp.o: CXX_COMPILER__peton_Release /home/zandies/Dokumentoj/Kodingo/peton/Machine.cpp || cmake_object_order_depends_target_peton
   DEP_FILE = CMakeFiles/peton.dir/Machine.cpp.o.d
-  FLAGS = -fcoroutines -fconcepts -pthread -fopenacc -fopenmp -ggdb3 -Wpedantic -Wall -Wextra -Wconversion -Wsign-conversion -Weffc++ -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-override -g -std=gnu++20
+  FLAGS = -fcoroutines -fconcepts -pthread -fopenacc -fopenmp -ggdb3 -Wpedantic -Wall -Wextra -Wconversion -Wsign-conversion -Weffc++ -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-override -O3 -DNDEBUG -std=gnu++20
   OBJECT_DIR = CMakeFiles/peton.dir
   OBJECT_FILE_DIR = CMakeFiles/peton.dir
 
-build CMakeFiles/peton.dir/Applications/Application.cpp.o: CXX_COMPILER__peton_Debug /home/zandies/Dokumentoj/Kodingo/peton/Applications/Application.cpp || cmake_object_order_depends_target_peton
+build CMakeFiles/peton.dir/Applications/Application.cpp.o: CXX_COMPILER__peton_Release /home/zandies/Dokumentoj/Kodingo/peton/Applications/Application.cpp || cmake_object_order_depends_target_peton
   DEP_FILE = CMakeFiles/peton.dir/Applications/Application.cpp.o.d
-  FLAGS = -fcoroutines -fconcepts -pthread -fopenacc -fopenmp -ggdb3 -Wpedantic -Wall -Wextra -Wconversion -Wsign-conversion -Weffc++ -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-override -g -std=gnu++20
+  FLAGS = -fcoroutines -fconcepts -pthread -fopenacc -fopenmp -ggdb3 -Wpedantic -Wall -Wextra -Wconversion -Wsign-conversion -Weffc++ -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-override -O3 -DNDEBUG -std=gnu++20
   OBJECT_DIR = CMakeFiles/peton.dir
   OBJECT_FILE_DIR = CMakeFiles/peton.dir/Applications
 
-build CMakeFiles/peton.dir/Applications/DHCP_Application.cpp.o: CXX_COMPILER__peton_Debug /home/zandies/Dokumentoj/Kodingo/peton/Applications/DHCP_Application.cpp || cmake_object_order_depends_target_peton
+build CMakeFiles/peton.dir/Applications/DHCP_Application.cpp.o: CXX_COMPILER__peton_Release /home/zandies/Dokumentoj/Kodingo/peton/Applications/DHCP_Application.cpp || cmake_object_order_depends_target_peton
   DEP_FILE = CMakeFiles/peton.dir/Applications/DHCP_Application.cpp.o.d
-  FLAGS = -fcoroutines -fconcepts -pthread -fopenacc -fopenmp -ggdb3 -Wpedantic -Wall -Wextra -Wconversion -Wsign-conversion -Weffc++ -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-override -g -std=gnu++20
+  FLAGS = -fcoroutines -fconcepts -pthread -fopenacc -fopenmp -ggdb3 -Wpedantic -Wall -Wextra -Wconversion -Wsign-conversion -Weffc++ -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-override -O3 -DNDEBUG -std=gnu++20
   OBJECT_DIR = CMakeFiles/peton.dir
   OBJECT_FILE_DIR = CMakeFiles/peton.dir/Applications
 
-build CMakeFiles/peton.dir/IP_Machine.cpp.o: CXX_COMPILER__peton_Debug /home/zandies/Dokumentoj/Kodingo/peton/IP_Machine.cpp || cmake_object_order_depends_target_peton
+build CMakeFiles/peton.dir/IP_Machine.cpp.o: CXX_COMPILER__peton_Release /home/zandies/Dokumentoj/Kodingo/peton/IP_Machine.cpp || cmake_object_order_depends_target_peton
   DEP_FILE = CMakeFiles/peton.dir/IP_Machine.cpp.o.d
-  FLAGS = -fcoroutines -fconcepts -pthread -fopenacc -fopenmp -ggdb3 -Wpedantic -Wall -Wextra -Wconversion -Wsign-conversion -Weffc++ -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-override -g -std=gnu++20
+  FLAGS = -fcoroutines -fconcepts -pthread -fopenacc -fopenmp -ggdb3 -Wpedantic -Wall -Wextra -Wconversion -Wsign-conversion -Weffc++ -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-override -O3 -DNDEBUG -std=gnu++20
   OBJECT_DIR = CMakeFiles/peton.dir
   OBJECT_FILE_DIR = CMakeFiles/peton.dir
 
-build CMakeFiles/peton.dir/Application_Machine.cpp.o: CXX_COMPILER__peton_Debug /home/zandies/Dokumentoj/Kodingo/peton/Application_Machine.cpp || cmake_object_order_depends_target_peton
+build CMakeFiles/peton.dir/Machine_Factory.cpp.o: CXX_COMPILER__peton_Release /home/zandies/Dokumentoj/Kodingo/peton/Machine_Factory.cpp || cmake_object_order_depends_target_peton
+  DEP_FILE = CMakeFiles/peton.dir/Machine_Factory.cpp.o.d
+  FLAGS = -fcoroutines -fconcepts -pthread -fopenacc -fopenmp -ggdb3 -Wpedantic -Wall -Wextra -Wconversion -Wsign-conversion -Weffc++ -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-override -O3 -DNDEBUG -std=gnu++20
+  OBJECT_DIR = CMakeFiles/peton.dir
+  OBJECT_FILE_DIR = CMakeFiles/peton.dir
+
+build CMakeFiles/peton.dir/Application_Machine.cpp.o: CXX_COMPILER__peton_Release /home/zandies/Dokumentoj/Kodingo/peton/Application_Machine.cpp || cmake_object_order_depends_target_peton
   DEP_FILE = CMakeFiles/peton.dir/Application_Machine.cpp.o.d
-  FLAGS = -fcoroutines -fconcepts -pthread -fopenacc -fopenmp -ggdb3 -Wpedantic -Wall -Wextra -Wconversion -Wsign-conversion -Weffc++ -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-override -g -std=gnu++20
+  FLAGS = -fcoroutines -fconcepts -pthread -fopenacc -fopenmp -ggdb3 -Wpedantic -Wall -Wextra -Wconversion -Wsign-conversion -Weffc++ -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-override -O3 -DNDEBUG -std=gnu++20
   OBJECT_DIR = CMakeFiles/peton.dir
   OBJECT_FILE_DIR = CMakeFiles/peton.dir
 
-build CMakeFiles/peton.dir/Packet.cpp.o: CXX_COMPILER__peton_Debug /home/zandies/Dokumentoj/Kodingo/peton/Packet.cpp || cmake_object_order_depends_target_peton
+build CMakeFiles/peton.dir/Packet.cpp.o: CXX_COMPILER__peton_Release /home/zandies/Dokumentoj/Kodingo/peton/Packet.cpp || cmake_object_order_depends_target_peton
   DEP_FILE = CMakeFiles/peton.dir/Packet.cpp.o.d
-  FLAGS = -fcoroutines -fconcepts -pthread -fopenacc -fopenmp -ggdb3 -Wpedantic -Wall -Wextra -Wconversion -Wsign-conversion -Weffc++ -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-override -g -std=gnu++20
+  FLAGS = -fcoroutines -fconcepts -pthread -fopenacc -fopenmp -ggdb3 -Wpedantic -Wall -Wextra -Wconversion -Wsign-conversion -Weffc++ -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-override -O3 -DNDEBUG -std=gnu++20
   OBJECT_DIR = CMakeFiles/peton.dir
   OBJECT_FILE_DIR = CMakeFiles/peton.dir
 
-build CMakeFiles/peton.dir/Link.cpp.o: CXX_COMPILER__peton_Debug /home/zandies/Dokumentoj/Kodingo/peton/Link.cpp || cmake_object_order_depends_target_peton
+build CMakeFiles/peton.dir/Link.cpp.o: CXX_COMPILER__peton_Release /home/zandies/Dokumentoj/Kodingo/peton/Link.cpp || cmake_object_order_depends_target_peton
   DEP_FILE = CMakeFiles/peton.dir/Link.cpp.o.d
-  FLAGS = -fcoroutines -fconcepts -pthread -fopenacc -fopenmp -ggdb3 -Wpedantic -Wall -Wextra -Wconversion -Wsign-conversion -Weffc++ -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-override -g -std=gnu++20
+  FLAGS = -fcoroutines -fconcepts -pthread -fopenacc -fopenmp -ggdb3 -Wpedantic -Wall -Wextra -Wconversion -Wsign-conversion -Weffc++ -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-override -O3 -DNDEBUG -std=gnu++20
   OBJECT_DIR = CMakeFiles/peton.dir
   OBJECT_FILE_DIR = CMakeFiles/peton.dir
 
-build CMakeFiles/peton.dir/Interface.cpp.o: CXX_COMPILER__peton_Debug /home/zandies/Dokumentoj/Kodingo/peton/Interface.cpp || cmake_object_order_depends_target_peton
+build CMakeFiles/peton.dir/Interface.cpp.o: CXX_COMPILER__peton_Release /home/zandies/Dokumentoj/Kodingo/peton/Interface.cpp || cmake_object_order_depends_target_peton
   DEP_FILE = CMakeFiles/peton.dir/Interface.cpp.o.d
-  FLAGS = -fcoroutines -fconcepts -pthread -fopenacc -fopenmp -ggdb3 -Wpedantic -Wall -Wextra -Wconversion -Wsign-conversion -Weffc++ -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-override -g -std=gnu++20
+  FLAGS = -fcoroutines -fconcepts -pthread -fopenacc -fopenmp -ggdb3 -Wpedantic -Wall -Wextra -Wconversion -Wsign-conversion -Weffc++ -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-override -O3 -DNDEBUG -std=gnu++20
   OBJECT_DIR = CMakeFiles/peton.dir
   OBJECT_FILE_DIR = CMakeFiles/peton.dir
 
-build CMakeFiles/peton.dir/types.cpp.o: CXX_COMPILER__peton_Debug /home/zandies/Dokumentoj/Kodingo/peton/types.cpp || cmake_object_order_depends_target_peton
+build CMakeFiles/peton.dir/types.cpp.o: CXX_COMPILER__peton_Release /home/zandies/Dokumentoj/Kodingo/peton/types.cpp || cmake_object_order_depends_target_peton
   DEP_FILE = CMakeFiles/peton.dir/types.cpp.o.d
-  FLAGS = -fcoroutines -fconcepts -pthread -fopenacc -fopenmp -ggdb3 -Wpedantic -Wall -Wextra -Wconversion -Wsign-conversion -Weffc++ -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-override -g -std=gnu++20
+  FLAGS = -fcoroutines -fconcepts -pthread -fopenacc -fopenmp -ggdb3 -Wpedantic -Wall -Wextra -Wconversion -Wsign-conversion -Weffc++ -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-override -O3 -DNDEBUG -std=gnu++20
   OBJECT_DIR = CMakeFiles/peton.dir
   OBJECT_FILE_DIR = CMakeFiles/peton.dir
 
@@ -117,8 +123,8 @@ build CMakeFiles/peton.dir/types.cpp.o: CXX_COMPILER__peton_Debug /home/zandies/
 #############################################
 # Link the executable peton
 
-build peton: CXX_EXECUTABLE_LINKER__peton_Debug CMakeFiles/peton.dir/main.cpp.o CMakeFiles/peton.dir/Machine.cpp.o CMakeFiles/peton.dir/Applications/Application.cpp.o CMakeFiles/peton.dir/Applications/DHCP_Application.cpp.o CMakeFiles/peton.dir/IP_Machine.cpp.o CMakeFiles/peton.dir/Application_Machine.cpp.o CMakeFiles/peton.dir/Packet.cpp.o CMakeFiles/peton.dir/Link.cpp.o CMakeFiles/peton.dir/Interface.cpp.o CMakeFiles/peton.dir/types.cpp.o
-  FLAGS = -fcoroutines -fconcepts -pthread -fopenacc -fopenmp -ggdb3 -Wpedantic -Wall -Wextra -Wconversion -Wsign-conversion -Weffc++ -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-override -g
+build peton: CXX_EXECUTABLE_LINKER__peton_Release CMakeFiles/peton.dir/main.cpp.o CMakeFiles/peton.dir/Machine.cpp.o CMakeFiles/peton.dir/Applications/Application.cpp.o CMakeFiles/peton.dir/Applications/DHCP_Application.cpp.o CMakeFiles/peton.dir/IP_Machine.cpp.o CMakeFiles/peton.dir/Machine_Factory.cpp.o CMakeFiles/peton.dir/Application_Machine.cpp.o CMakeFiles/peton.dir/Packet.cpp.o CMakeFiles/peton.dir/Link.cpp.o CMakeFiles/peton.dir/Interface.cpp.o CMakeFiles/peton.dir/types.cpp.o
+  FLAGS = -fcoroutines -fconcepts -pthread -fopenacc -fopenmp -ggdb3 -Wpedantic -Wall -Wextra -Wconversion -Wsign-conversion -Weffc++ -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-override -O3 -DNDEBUG
   OBJECT_DIR = CMakeFiles/peton.dir
   POST_BUILD = :
   PRE_LINK = :

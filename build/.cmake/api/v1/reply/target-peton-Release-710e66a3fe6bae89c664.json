@@ -35,7 +35,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : " -fcoroutines -fconcepts -pthread -fopenacc -fopenmp -ggdb3 -Wpedantic -Wall -Wextra -Wconversion -Wsign-conversion -Weffc++ -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-override -g"
+					"fragment" : " -fcoroutines -fconcepts -pthread -fopenacc -fopenmp -ggdb3 -Wpedantic -Wall -Wextra -Wconversion -Wsign-conversion -Weffc++ -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-override -O3 -DNDEBUG"
 				},
 				{
 					"fragment" : "-std=gnu++20"
@@ -57,11 +57,12 @@
 				3,
 				5,
 				8,
-				10,
+				9,
 				12,
 				14,
 				16,
-				18
+				18,
+				20
 			]
 		}
 	],
@@ -71,7 +72,7 @@
 		"commandFragments" : 
 		[
 			{
-				"fragment" : "-fcoroutines -fconcepts -pthread -fopenacc -fopenmp -ggdb3 -Wpedantic -Wall -Wextra -Wconversion -Wsign-conversion -Weffc++ -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-override -g",
+				"fragment" : "-fcoroutines -fconcepts -pthread -fopenacc -fopenmp -ggdb3 -Wpedantic -Wall -Wextra -Wconversion -Wsign-conversion -Weffc++ -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-override -O3 -DNDEBUG",
 				"role" : "flags"
 			},
 			{
@@ -99,11 +100,12 @@
 				3,
 				5,
 				8,
-				10,
+				9,
 				12,
 				14,
 				16,
-				18
+				18,
+				20
 			]
 		},
 		{
@@ -114,11 +116,12 @@
 				4,
 				6,
 				7,
-				9,
+				10,
 				11,
 				13,
 				15,
-				17
+				17,
+				19
 			]
 		}
 	],
@@ -173,6 +176,17 @@
 			"compileGroupIndex" : 0,
 			"path" : "IP_Machine.cpp",
 			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Machine_Factory.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "Machine_Factory.hpp",
+			"sourceGroupIndex" : 1
 		},
 		{
 			"backtrace" : 1,

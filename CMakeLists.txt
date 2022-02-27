@@ -20,6 +20,8 @@ add_executable(
     Applications/DHCP_Application.hpp
     IP_Machine.hpp
     IP_Machine.cpp
+    Machine_Factory.cpp
+    Machine_Factory.hpp
     Application_Machine.hpp
     Application_Machine.cpp
     Packet.hpp
