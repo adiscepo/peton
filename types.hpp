@@ -6,6 +6,8 @@
 #include <vector>
 class IP_Machine;
 
+#define SHOW_IP(ip) std::cout << IP_Machine::IPv42char(ip) << std::endl;
+
 #ifdef DEBUG
 #define DEBUG(log) std::cout << log << std::endl;
 #define LOG(machine, log) std::cout <<"[" << machine << "] " << log << std::endl;
@@ -28,7 +30,9 @@ typedef struct CIDR {
 } __attribute__((packed)) CIDR;
 
 IPv4 get_mask(CIDR mask);
-IPv4 get_subnet(IPv4 ip, CIDR mask);
+IPv4 get_subnet_part(IPv4 ip, CIDR mask);
+IPv4 get_host_part(IPv4 ip, CIDR mask);
+bool is_IP_broadcast(IPv4 ip, CIDR mask);
 
 typedef struct MAC {
     uint64_t x:48;
@@ -97,5 +101,6 @@ const MAC MAC_ARP_REQUEST = {0x000000000000};
 const MAC MAC_ERROR = {};
 
 const IPv4 IP_DEFAULT = 0x0;
+const IPv4 IP_BROADCAST = 0xffffffff;
 
 #endif

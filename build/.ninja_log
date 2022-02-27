@@ -1,0 +1,10 @@
+# ninja log v5
+0	44	1645891134018670837	CMakeFiles/peton.dir/Machine.cpp.o	fa2a3e33340657c
+1	1270	1645891135243669862	CMakeFiles/peton.dir/Packet.cpp.o	c3c8e74b8f7bf200
+2	952	1645891134926670115	CMakeFiles/peton.dir/Link.cpp.o	11f183b789f8aae4
+2	1144	1645891135118669962	CMakeFiles/peton.dir/Interface.cpp.o	a4b0a93ec01e8a3b
+1	1244	1645891135217669883	CMakeFiles/peton.dir/Application_Machine.cpp.o	dcb67948b0b77e66
+0	1500	1645891135472669680	CMakeFiles/peton.dir/IP_Machine.cpp.o	7f4d589c56aef87d
+0	1334	1645891135308669810	CMakeFiles/peton.dir/main.cpp.o	cf24766f21e6aeb8
+6	1419	1645891135393669743	CMakeFiles/peton.dir/types.cpp.o	2c6f03cab77b3498
+1500	1686	1645891135658669532	peton	3e3cb414d3320795

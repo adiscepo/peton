@@ -4,24 +4,25 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>180</x>
-      <y>200</y>
-      <w>210</w>
-      <h>190</h>
+      <x>520</x>
+      <y>170</y>
+      <w>100</w>
+      <h>100</h>
     </coordinates>
     <panel_attributes>bg=green
 Packet
 --
 
 --
+
 </panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>480</x>
-      <y>200</y>
+      <x>710</x>
+      <y>180</y>
       <w>100</w>
       <h>110</h>
     </coordinates>
@@ -38,10 +39,10 @@ UDP</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>690</x>
-      <y>200</y>
+      <x>920</x>
+      <y>180</y>
       <w>310</w>
-      <h>140</h>
+      <h>120</h>
     </coordinates>
     <panel_attributes>bg=green
 ETHERNET
@@ -57,8 +58,8 @@ ETHERNET(MAC, MAC, EtherType, Packet*)</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1030</x>
-      <y>220</y>
+      <x>1260</x>
+      <y>200</y>
       <w>100</w>
       <h>60</h>
     </coordinates>
@@ -72,8 +73,8 @@ ARP0x0806</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>180</x>
-      <y>20</y>
+      <x>410</x>
+      <y>0</y>
       <w>100</w>
       <h>30</h>
     </coordinates>
@@ -84,8 +85,8 @@ bg=yellow</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>180</x>
-      <y>50</y>
+      <x>410</x>
+      <y>30</y>
       <w>100</w>
       <h>30</h>
     </coordinates>
@@ -96,10 +97,10 @@ bg=green</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>690</x>
-      <y>360</y>
+      <x>920</x>
+      <y>340</y>
       <w>280</w>
-      <h>140</h>
+      <h>130</h>
     </coordinates>
     <panel_attributes>bg=green
 ARP
@@ -116,8 +117,8 @@ ARP(ARP_Opcode, MAC, IPv4, MAC, IP)</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1030</x>
-      <y>380</y>
+      <x>1260</x>
+      <y>360</y>
       <w>120</w>
       <h>60</h>
     </coordinates>
@@ -131,10 +132,10 @@ RESPONSE = 2</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>690</x>
-      <y>520</y>
+      <x>920</x>
+      <y>500</y>
       <w>250</w>
-      <h>140</h>
+      <h>130</h>
     </coordinates>
     <panel_attributes>bg=green
 IP
@@ -151,8 +152,8 @@ IP(IP_Protocol, IPv4, IPv4, Packet*)</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1030</x>
-      <y>490</y>
+      <x>1260</x>
+      <y>470</y>
       <w>110</w>
       <h>60</h>
     </coordinates>
@@ -166,8 +167,8 @@ IPv6 = 0b110</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1030</x>
-      <y>560</y>
+      <x>1260</x>
+      <y>540</y>
       <w>110</w>
       <h>130</h>
     </coordinates>
@@ -185,8 +186,8 @@ OSPF = 89</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>930</x>
-      <y>560</y>
+      <x>1160</x>
+      <y>540</y>
       <w>120</w>
       <h>30</h>
     </coordinates>
@@ -196,8 +197,8 @@ OSPF = 89</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>930</x>
-      <y>490</y>
+      <x>1160</x>
+      <y>470</y>
       <w>120</w>
       <h>90</h>
     </coordinates>
@@ -207,8 +208,8 @@ OSPF = 89</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>960</x>
-      <y>380</y>
+      <x>1190</x>
+      <y>360</y>
       <w>90</w>
       <h>30</h>
     </coordinates>
@@ -218,8 +219,8 @@ OSPF = 89</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>990</x>
-      <y>220</y>
+      <x>1220</x>
+      <y>200</y>
       <w>60</w>
       <h>30</h>
     </coordinates>
@@ -229,8 +230,8 @@ OSPF = 89</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>690</x>
-      <y>690</y>
+      <x>920</x>
+      <y>670</y>
       <w>150</w>
       <h>70</h>
     </coordinates>
@@ -245,8 +246,8 @@ ICMP(ICMP_Type)</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>380</x>
-      <y>260</y>
+      <x>610</x>
+      <y>240</y>
       <w>330</w>
       <h>140</h>
     </coordinates>
@@ -256,19 +257,19 @@ ICMP(ICMP_Type)</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>610</x>
-      <y>200</y>
+      <x>840</x>
+      <y>180</y>
       <w>30</w>
-      <h>520</h>
+      <h>750</h>
     </coordinates>
     <panel_attributes>lt=-</panel_attributes>
-    <additional_attributes>10.0;500.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;730.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>610</x>
-      <y>200</y>
+      <x>840</x>
+      <y>180</y>
       <w>100</w>
       <h>30</h>
     </coordinates>
@@ -278,8 +279,8 @@ ICMP(ICMP_Type)</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>610</x>
-      <y>520</y>
+      <x>840</x>
+      <y>500</y>
       <w>100</w>
       <h>30</h>
     </coordinates>
@@ -289,8 +290,8 @@ ICMP(ICMP_Type)</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>610</x>
-      <y>690</y>
+      <x>840</x>
+      <y>670</y>
       <w>100</w>
       <h>30</h>
     </coordinates>
@@ -300,8 +301,8 @@ ICMP(ICMP_Type)</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>900</x>
-      <y>690</y>
+      <x>1130</x>
+      <y>670</y>
       <w>110</w>
       <h>60</h>
     </coordinates>
@@ -315,8 +316,8 @@ ECHO_req = 8</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>830</x>
-      <y>690</y>
+      <x>1060</x>
+      <y>670</y>
       <w>90</w>
       <h>60</h>
     </coordinates>
@@ -326,12 +327,190 @@ ECHO_req = 8</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>380</x>
-      <y>200</y>
+      <x>610</x>
+      <y>180</y>
       <w>120</w>
       <h>60</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
     <additional_attributes>100.0;10.0;60.0;10.0;60.0;40.0;10.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>920</x>
+      <y>770</y>
+      <w>210</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>bg=green
+UDP
+--
+port_t src
+port_t dest
+Packet* payload
+--
+UDP(port_t, port_t, Packet*)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>840</x>
+      <y>770</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>80.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>920</x>
+      <y>900</y>
+      <w>410</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>bg=green
+DHCP
+--
+DHCP_Message_Type  message_type
+IPv4 CIADDR
+IPv4 YIADDR
+IPv4 SIADDR
+IPv4 GIADDR
+MAC CHADDR
+--
+DHCP(DHCP_Message_Type, IPv4, IPv4, IPv4, IPv4, MAC)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>840</x>
+      <y>900</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>80.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1380</x>
+      <y>900</y>
+      <w>170</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>bg=yellow
+DHCP_Message_Type
+--
+Discover = 1
+Offer = 2
+Request = 3
+Decline = 4
+ACK = 5
+NAK = 6
+Release = 7
+Inform = 8</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1320</x>
+      <y>900</y>
+      <w>80</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>60.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>200</x>
+      <y>480</y>
+      <w>420</w>
+      <h>250</h>
+    </coordinates>
+    <panel_attributes>bg=green
+IP_Machine
+--
+char _label
+ARP_Table _arp_table
+Routing_Table _routing_table
+std::map&lt;interface_t, Interface*&gt; _interface
+--
+void send(Packet&amp; P)
+void receipt(Packet&amp; P)
+
+ARP_Table&amp; get_arp_table()
+Routing_Table&amp; get_routing_table()
+
+void physical_layer(Packet&amp; P, interface_t from_interface)
+void datalink_layer(Packet&amp; P, interface_t from_interface)
+void internet_layer(Packet&amp; P, interface_t from_interface)
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>200</x>
+      <y>890</y>
+      <w>430</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>bg=green
+Application_Machine
+--
+--
+void transport_layer(Packet&amp; P, interface_t from_interface)
+void application_layer(Packet&amp; P, interface_t from_interface)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>400</x>
+      <y>720</y>
+      <w>30</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;170.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>30</x>
+      <y>480</y>
+      <w>150</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>bg=yellow
+Machine utilisant 
+uniquement les 3 
+premières couches 
+réseau (eg: routeur)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>30</x>
+      <y>890</y>
+      <w>150</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>bg=yellow
+Machine "complète" 
+ayant toutes les 
+couches TCP/IP
+(eg: serveur, PC)</panel_attributes>
+    <additional_attributes/>
   </element>
 </diagram>

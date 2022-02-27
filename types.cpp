@@ -16,9 +16,18 @@ IPv4 get_mask(CIDR mask){
     return subnet_mask;
 }
 
-IPv4 get_subnet(IPv4 ip, CIDR mask) {
+IPv4 get_subnet_part(IPv4 ip, CIDR mask) {
     IPv4 mask_ip = get_mask(mask);
     return ip & mask_ip;
+}
+
+IPv4 get_host_part(IPv4 ip, CIDR mask) {
+    IPv4 mask_ip = get_mask(mask);
+    return ip & ~mask_ip;
+}
+
+bool is_IP_broadcast(IPv4 ip, CIDR mask) {
+    return get_host_part(ip, mask) == get_host_part(IP_BROADCAST, mask);
 }
 
 // ------------ EXCEPTION ---------------

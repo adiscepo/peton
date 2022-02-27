@@ -9,24 +9,24 @@ class Interface;
 class Packet;
 
 class IP_Machine {
-private:
+protected:
     char _label;
     ARP_Table _arp_table = {};
     Routing_Table _routing_table = {};
     std::map<interface_t, Interface*> _interfaces = {};
+    bool _forward = true; // Machine can forward packet ?
 
-    void action(Packet& p, interface_t from_interface);
+    virtual void action(Packet& p, interface_t from_interface);
     void ARP_action(Packet& P, interface_t from_interface);
     void IP_action(Packet& P, interface_t from_interface);
     void ICMP_action(Packet& P, interface_t from_interface);
-    void UDP_action(Packet& P, interface_t from_interface);
-    void DHCP_action(Packet& P, interface_t from_interface);
     void add_in_routing_table(IPv4 ip, CIDR mask, uint metric, interface_t interface);
     bool as_ip(IPv4 ip);
     bool as_mac(MAC mac);
 public:
     IP_Machine() : _label(static_cast<char>(65 + total)) { IP_Machine::total += 1; };
-    IP_Machine(std::vector<Interface*> interfaces);
+    IP_Machine(bool forward) : _label(static_cast<char>(65 + total)), _forward(forward) { IP_Machine::total += 1; };
+    IP_Machine(bool forward, std::vector<Interface*> interfaces);
 
     void set_interface(Interface& interface);
     void set_interfaces(std::vector<Interface*> interface);
@@ -38,6 +38,8 @@ public:
     void send(Packet& P);
     void receipt(Packet& p, interface_t from_interface);
 
+    bool can_forward() { return _forward; }
+
     ARP_Table& get_arp_table() { return _arp_table; };
     Routing_Table& get_routing_table() { return _routing_table; };
     // // POUR TEST UNIQUEMENT
@@ -46,14 +48,15 @@ public:
     void physical_layer(Packet& P, interface_t from_interface);
     void datalink_layer(Packet& P, interface_t from_interface);
     void internet_layer(Packet& P, interface_t from_interface);
-    void transport_layer(Packet& P, interface_t from_interface);
-    void application_layer(Packet& P, interface_t from_interface);
 
+    // Affiche les tables en ASCII
     void arp();
     void ip_route();
 
     char get_label() { return _label; }
     void set_label(char s) { _label = s; }
+
+    virtual ~IP_Machine() noexcept = default;
 
     static int total;
     static bool connect(IP_Machine& machine1, IP_Machine& machine2, interface_t interface1, interface_t interface2);

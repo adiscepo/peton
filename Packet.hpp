@@ -71,7 +71,6 @@ struct Packet {
 
     struct DHCP {
         enum class DHCP_Message_Type { Discover = 1, Offer = 2, Request = 3, Decline = 4, ACK = 5, NAK = 6, Release = 7, Inform = 8 };
-        DHCP_Message_Type message_type;
         // uint8_t OP; // Operation Code: Specifies the general type of message. A value of 1 indicates a request message, while a value of 2 is a reply message.
         // uint8_t HTYPE;
         // uint8_t HLEN;
@@ -83,8 +82,17 @@ struct Packet {
         IPv4 GIADDR; // Gateway IP
         MAC CHADDR;  // Client MAC
         // std::string SNAME; // Nom du serveur
+        struct DHCP_Options {
+            DHCP_Message_Type message_type;
+            IPv4 address_request = 0; // Par défaut est égale à 0, si il y'a une autre valeur c'est que la machine veut cette IP spécifiquement
+            CIDR subnet_mask;
+            IPv4 router;
+            IPv4 dhcp_server;
+            void set_message_type (DHCP_Message_Type msg) { message_type = msg; }
+        };
+        DHCP_Options options;
         DHCP(DHCP_Message_Type type, IPv4 C, IPv4 Y, IPv4 S, IPv4 G, MAC M) 
-            : message_type(type), CIADDR(C), YIADDR(Y), SIADDR(S), GIADDR(G), CHADDR(M) {};
+            : CIADDR(C), YIADDR(Y), SIADDR(S), GIADDR(G), CHADDR(M) {options.message_type = type;};
         friend std::ostream& operator<< (std::ostream& o, const DHCP& P);
     };
 

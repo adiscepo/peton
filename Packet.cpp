@@ -67,12 +67,14 @@ Packet* Packet_Factory::IP(Interface& from, Packet::IP::IP_Protocol protocol, IP
         DEBUG("[Packet_Factory.IP] Content OSPF")
         break;
     default:
-        DEBUG("[PAcket_Factory.IP] Content is undefined")
+        DEBUG("[Packet_Factory.IP] Content is undefined")
         break;
     }
 
-    ip_dest = m->get_routing_table().longest_prefix(ip_dest)._via; // On récupère l'ip de la machine nous permettant d'accéder au sous-réseau voulu
-    
+    if(m->get_routing_table().longest_prefix(ip_dest)._via != IP_Machine::char2IPv4("0.0.0.0")) ip_dest = m->get_routing_table().longest_prefix(ip_dest)._via; // On récupère l'ip de la machine nous permettant d'accéder au sous-réseau voulu
+    interface_t interface = m->get_routing_table().longest_prefix(ip_dest)._interface;
+    // Sinon l'ip de destination est sur le même sous-réseau
+
     LOG(from.get_machine()->get_label(), "Est-ce que je connais l'adresse MAC de " + IP_Machine::IPv42char(ip_dest) + " ?")
     if (m->get_arp_table().is_IP_in(ip_dest)){ // La machine a l'adresse
         LOG(from.get_machine()->get_label(), "Oui, j'ai l'entrée dans ma table ARP, son adresse MAC est " + IP_Machine::MAC2char(m->get_arp_table().from_IP(ip_dest)))
@@ -83,7 +85,7 @@ Packet* Packet_Factory::IP(Interface& from, Packet::IP::IP_Protocol protocol, IP
     }else{
         LOG(from.get_machine()->get_label(), "J'ai que dalle, j'interroge mes voisins pour savoir si quelqu'un a cet adresse IP sur mon sous-réseau (requête ARP)")
         Packet* p = Packet_Factory::ARP(*from.get_machine(), Packet::ARP::ARP_Opcode::REQUEST, from.get_mac(), from.get_ip(), {}, ip_dest);
-        from.send(*p); // Va mettre à jour la table ARP de machine from
+        m->interface(interface).send(*p); // Va mettre à jour la table ARP de machine from
         if (m->get_arp_table().is_IP_in(ip_dest)){
             LOG(from.get_machine()->get_label(), "J'ai récupéré l'adresse MAC de " + IP_Machine::IPv42char(ip_dest) + " ! C'est " + IP_Machine::MAC2char(m->get_arp_table().from_IP(ip_dest)))
             return Packet_Factory::ETHERNET(from.get_mac(), 
@@ -92,7 +94,7 @@ Packet* Packet_Factory::IP(Interface& from, Packet::IP::IP_Protocol protocol, IP
                                                 *ip);
         }else{
             // On devrait pas se trouver ici normalement
-            LOG(from.get_machine()->get_label(), "[PROBLEM] Ok là je viens d'envoier une req ARP et ma table ne s'est pas mise à jour, je sais pas")
+            LOG(from.get_machine()->get_label(), "[PROBLEM] Ok là je viens d'envoyer une req ARP et ma table ne s'est pas mise à jour, je sais pas")
         }
     }
     return nullptr;
@@ -121,7 +123,7 @@ Packet* Packet_Factory::DHCP(Interface& from, Packet::DHCP::DHCP_Message_Type ty
     MAC mac_src = from.get_mac();
     MAC mac_dest = MAC_BROADCAST;
     if (type == Packet::DHCP::DHCP_Message_Type::Discover || type == Packet::DHCP::DHCP_Message_Type::Request) { p_src = 67; p_dest = 68; } 
-    if (type == Packet::DHCP::DHCP_Message_Type::Offer || type == Packet::DHCP::DHCP_Message_Type::ACK) { p_src = 67; p_dest = 68; mac_dest = M; ip_src = from.get_ip(); } 
+    if (type == Packet::DHCP::DHCP_Message_Type::Offer || type == Packet::DHCP::DHCP_Message_Type::ACK) { p_src = 68; p_dest = 67; mac_dest = M; ip_src = from.get_ip(); } 
     // Création du paquet 
     Packet* dhcp = new Packet();
     dhcp->type = Packet::Type::DHCP;
@@ -133,6 +135,7 @@ Packet* Packet_Factory::DHCP(Interface& from, Packet::DHCP::DHCP_Message_Type ty
     udp->data.udp.dest = p_dest;
     Packet* ip = new Packet();
     ip->type = Packet::Type::IP;
+    ip->data.ip.version = Packet::IP::IP_Version::IPv4;
     ip->data.ip.src  = ip_src;
     ip->data.ip.dest = ip_dest;
     ip->data.ip.protocol = Packet::IP::IP_Protocol::UDP;
@@ -229,34 +232,34 @@ std::ostream& operator<< (std::ostream& o, const Packet::DHCP& P) {
     o << "|   Type   |  ";
     std::cout.setf(std::ios::left, std::ios::adjustfield);
     std::cout.width(21);
-    if (P.message_type == Packet::DHCP::DHCP_Message_Type::Discover) o <<  "Discover";
-    else if (P.message_type == Packet::DHCP::DHCP_Message_Type::Request) o <<  "Request";
-    else if (P.message_type == Packet::DHCP::DHCP_Message_Type::Offer) o <<  "Offer";
-    else if (P.message_type == Packet::DHCP::DHCP_Message_Type::Decline) o <<  "Decline";
-    else if (P.message_type == Packet::DHCP::DHCP_Message_Type::Release) o <<  "Release";
-    else if (P.message_type == Packet::DHCP::DHCP_Message_Type::ACK) o <<  "ACK";
-    else if (P.message_type == Packet::DHCP::DHCP_Message_Type::NAK) o <<  "NAK";
-    else if (P.message_type == Packet::DHCP::DHCP_Message_Type::Inform) o <<  "Inform";
+    if (P.options.message_type == Packet::DHCP::DHCP_Message_Type::Discover) o <<  "Discover";
+    else if (P.options.message_type == Packet::DHCP::DHCP_Message_Type::Request) o <<  "Request";
+    else if (P.options.message_type == Packet::DHCP::DHCP_Message_Type::Offer) o <<  "Offer";
+    else if (P.options.message_type == Packet::DHCP::DHCP_Message_Type::Decline) o <<  "Decline";
+    else if (P.options.message_type == Packet::DHCP::DHCP_Message_Type::Release) o <<  "Release";
+    else if (P.options.message_type == Packet::DHCP::DHCP_Message_Type::ACK) o <<  "ACK";
+    else if (P.options.message_type == Packet::DHCP::DHCP_Message_Type::NAK) o <<  "NAK";
+    else if (P.options.message_type == Packet::DHCP::DHCP_Message_Type::Inform) o <<  "Inform";
     o << "|" << std::endl;
     o << "|  CiAddr  |  ";
     std::cout.setf(std::ios::left, std::ios::adjustfield);
     std::cout.width(21);
-    o << P.CIADDR;
+    o << IP_Machine::IPv42char(P.CIADDR);
     o << "|" << std::endl;
     o << "|  YiAddr  |  ";
     std::cout.setf(std::ios::left, std::ios::adjustfield);
     std::cout.width(21);
-    o << P.YIADDR;
+    o << IP_Machine::IPv42char(P.YIADDR);
     o << "|" << std::endl;
     o << "|  SiAddr  |  ";
     std::cout.setf(std::ios::left, std::ios::adjustfield);
     std::cout.width(21);
-    o << P.SIADDR;
+    o << IP_Machine::IPv42char(P.SIADDR);
     o << "|" << std::endl;
     o << "|  GiAddr  |  ";
     std::cout.setf(std::ios::left, std::ios::adjustfield);
     std::cout.width(21);
-    o << P.GIADDR;
+    o << IP_Machine::IPv42char(P.GIADDR);
     o << "|" << std::endl;
     o << "|  ChAddr  |  ";
     std::cout.setf(std::ios::left, std::ios::adjustfield);

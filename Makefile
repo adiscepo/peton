@@ -129,6 +129,78 @@ peton/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/peton.dir/build.make CMakeFiles/peton.dir/build
 .PHONY : peton/fast
 
+Application_Machine.o: Application_Machine.cpp.o
+.PHONY : Application_Machine.o
+
+# target to build an object file
+Application_Machine.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/peton.dir/build.make CMakeFiles/peton.dir/Application_Machine.cpp.o
+.PHONY : Application_Machine.cpp.o
+
+Application_Machine.i: Application_Machine.cpp.i
+.PHONY : Application_Machine.i
+
+# target to preprocess a source file
+Application_Machine.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/peton.dir/build.make CMakeFiles/peton.dir/Application_Machine.cpp.i
+.PHONY : Application_Machine.cpp.i
+
+Application_Machine.s: Application_Machine.cpp.s
+.PHONY : Application_Machine.s
+
+# target to generate assembly for a file
+Application_Machine.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/peton.dir/build.make CMakeFiles/peton.dir/Application_Machine.cpp.s
+.PHONY : Application_Machine.cpp.s
+
+Applications/Application.o: Applications/Application.cpp.o
+.PHONY : Applications/Application.o
+
+# target to build an object file
+Applications/Application.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/peton.dir/build.make CMakeFiles/peton.dir/Applications/Application.cpp.o
+.PHONY : Applications/Application.cpp.o
+
+Applications/Application.i: Applications/Application.cpp.i
+.PHONY : Applications/Application.i
+
+# target to preprocess a source file
+Applications/Application.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/peton.dir/build.make CMakeFiles/peton.dir/Applications/Application.cpp.i
+.PHONY : Applications/Application.cpp.i
+
+Applications/Application.s: Applications/Application.cpp.s
+.PHONY : Applications/Application.s
+
+# target to generate assembly for a file
+Applications/Application.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/peton.dir/build.make CMakeFiles/peton.dir/Applications/Application.cpp.s
+.PHONY : Applications/Application.cpp.s
+
+Applications/DHCP_Application.o: Applications/DHCP_Application.cpp.o
+.PHONY : Applications/DHCP_Application.o
+
+# target to build an object file
+Applications/DHCP_Application.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/peton.dir/build.make CMakeFiles/peton.dir/Applications/DHCP_Application.cpp.o
+.PHONY : Applications/DHCP_Application.cpp.o
+
+Applications/DHCP_Application.i: Applications/DHCP_Application.cpp.i
+.PHONY : Applications/DHCP_Application.i
+
+# target to preprocess a source file
+Applications/DHCP_Application.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/peton.dir/build.make CMakeFiles/peton.dir/Applications/DHCP_Application.cpp.i
+.PHONY : Applications/DHCP_Application.cpp.i
+
+Applications/DHCP_Application.s: Applications/DHCP_Application.cpp.s
+.PHONY : Applications/DHCP_Application.s
+
+# target to generate assembly for a file
+Applications/DHCP_Application.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/peton.dir/build.make CMakeFiles/peton.dir/Applications/DHCP_Application.cpp.s
+.PHONY : Applications/DHCP_Application.cpp.s
+
 IP_Machine.o: IP_Machine.cpp.o
 .PHONY : IP_Machine.o
 
@@ -306,6 +378,15 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... peton"
+	@echo "... Application_Machine.o"
+	@echo "... Application_Machine.i"
+	@echo "... Application_Machine.s"
+	@echo "... Applications/Application.o"
+	@echo "... Applications/Application.i"
+	@echo "... Applications/Application.s"
+	@echo "... Applications/DHCP_Application.o"
+	@echo "... Applications/DHCP_Application.i"
+	@echo "... Applications/DHCP_Application.s"
 	@echo "... IP_Machine.o"
 	@echo "... IP_Machine.i"
 	@echo "... IP_Machine.s"

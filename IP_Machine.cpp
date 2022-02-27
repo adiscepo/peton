@@ -3,7 +3,6 @@
 #include <bitset>
 #include "Link.hpp"
 #include "Interface.hpp"
-// #include "Interface.cpp" // Besoin pour avoir accès à la méthode statique
 
 // Méthodes statiques
 
@@ -81,7 +80,7 @@ std::string IP_Machine::MAC2char(MAC mac) {
 // Méthodes
 
 // Konstruemo
-IP_Machine::IP_Machine(std::vector<Interface*> interfaces) : _label(static_cast<char>(65 + total)) 
+IP_Machine::IP_Machine(bool forward, std::vector<Interface*> interfaces) : _label(static_cast<char>(65 + total)), _forward(forward) 
     {for (auto elem: interfaces) _interfaces.insert({elem->get_interface_number(), elem}); IP_Machine::total += 1; };
 
 void IP_Machine::set_interface(Interface& interface) {
@@ -93,7 +92,9 @@ void IP_Machine::set_interfaces(std::vector<Interface*> interfaces) {
 }
 
 bool IP_Machine::as_ip(IPv4 ip) { 
-    for (auto i: _interfaces) if (i.second->get_ip() == ip) return true; 
+    for (auto i: _interfaces) {
+        if (i.second->get_ip() == ip) return true;
+    } 
     return false;
 }
 
@@ -105,37 +106,42 @@ bool IP_Machine::as_mac(MAC mac) {
 // Couche physique
 void IP_Machine::physical_layer(Packet& P, interface_t from_interface) {
     // On passe la paquet directement à la couche liaison de données, il n'y a rien que l'on puisse faire ici (en tant qu'émulateur ce n'est pas nécéssaire)
-    // DEBUG(P);
-    std::cout << P << std::endl;
-    action(P, from_interface);
+    DEBUG(P);
+    // std::cout << P << std::endl;
+    datalink_layer(P, from_interface);
 }
 
 // Couche liaison des données
 void IP_Machine::datalink_layer(Packet& P, interface_t from_interface) {
+    // if (P.data.ethernet.payload->type == Packet::Type::IP) _arp_table.add_in_table(P.data.ethernet.src, P.data.ethernet.payload->data.ip.src, from_interface);
     // Lorsqu'un paquet arrive sur le réseau, on se limite au contenu direct (trame ethernet)
     // Est-ce que le paquet nous est destiné ?
     // Si oui, je l'ouvre et passe à la couche suivante (internet)
     // Sinon est-ce que nous pouvons le transférer quelque part ? 
     if (P.type == Packet::Type::ETHERNET) { // Il s'agit d'un paquet Ethernet (y'a que ça ici)
         LOG(_label, "arrivé avec le protocole Ethernet")
-        if (as_mac(P.data.ethernet.dest) || (P.data.ethernet.dest == MAC_BROADCAST && !as_mac(P.data.ethernet.src))) { // Le paquet m'est destiné: soit directement, soit par broadcast (on check que le broadcast ne provienne pas de nous)
-            LOG(_label, "ce paquet est pour moi");
-            if (P.data.ethernet.payload != nullptr) {
-                action(*P.data.ethernet.payload, from_interface);
-            }
+        // Le paquet m'est destiné: soit directement, soit par broadcast (on check que le broadcast ne provienne pas de nous)
+        if (as_mac(P.data.ethernet.dest) || (P.data.ethernet.dest == MAC_BROADCAST && !as_mac(P.data.ethernet.src))) { 
+            LOG(_label, "ce paquet Ethernet est pour moi");
+            if (P.data.ethernet.payload != nullptr) internet_layer(*P.data.ethernet.payload, from_interface);
         }else{
-            LOG(_label, "ce paquet n'est pas pour moi");
-            if (_arp_table.is_MAC_in(P.data.ethernet.dest)) {
-                LOG(_label, "J'ai l'adresse MAC dans ma table ARP");
-            }else{
-                LOG(_label, "J'ai pas l'adresse MAC dans ma table ARP, je forge un paquet de requête ARP pour savoir à qui l'adresse IP appartient")
-                // Packet* req_arp = Packet_Factory::ARP(Packet::ARP::ARP_Opcode::REQUEST, _interfaces[from_interface]->get_mac(), _interfaces[from_interface]->get_ip(), MAC_BROADCAST, )
-            }
+            LOG(_label, "ce paquet Ethernet n'est pas pour moi");
         }
     }
 }
 
-
+void IP_Machine::internet_layer(Packet& P, interface_t from_interface) {
+    switch (P.type) {
+    case Packet::Type::ARP:
+        ARP_action(P, from_interface);
+        break;
+    case Packet::Type::IP:
+        IP_action(P, from_interface);
+        break;
+    default:
+        break;
+    }
+}
 
 // Envoie le paquet sur le lien, en fonction de l'adresse MAC de destination 
 void IP_Machine::send(Packet& P) {
@@ -181,32 +187,35 @@ void IP_Machine::ARP_action(Packet& P, interface_t from_interface) {
 
 void IP_Machine::IP_action(Packet& P, interface_t from_interface) {
     std::cout << IP_Machine::IPv42char(P.data.ip.src) << " a envoyé un paquet IP. On l'a reçu depuis l'interface eth" << from_interface << std::endl;
-    if (as_ip(P.data.ip.dest)) { // Si le paquet est destiné à la machine
-        if (P.data.ip.protocol == Packet::IP::IP_Protocol::ICMP) ICMP_action(P, from_interface);
-        if (P.data.ip.protocol == Packet::IP::IP_Protocol::UDP) UDP_action(P, from_interface);
-    }else{
-        LOG(_label, "Ce paquet n'est pas pour moi, je le transfère")
-        // TODO: Rempaqueter le paquet reçu et le transférer au prochain routeur
+    if (as_ip(P.data.ip.dest) || is_IP_broadcast(P.data.ip.dest, _interfaces[from_interface]->get_cidr())) { // Si le paquet est destiné à la machine
+        LOG(_label, "Ce paquet IP est pour moi, je l'ouvre")
+        action(P, from_interface);
+    } else {
+        LOG(_label, "Ce paquet IP n'est pas pour moi, je le transfère")
         // Forward du paquet
-        IPv4 ip_dest = P.data.ip.dest;
-        auto entries = _routing_table.longest_prefix(ip_dest);
-        if (entries._metric == 0){ // Si l'hôte de destination que nous cherchons se trouve sur un sous-réseau auquel nous avons accès
-            Interface* interface = _interfaces.at(entries._interface); 
-            ip_route();
-            std::cout << "La destination du paquet se trouve sur le sous-réseau " << IPv42char(entries._subnet) << " auquel je sais accéder depuis l'interface " << entries._interface << std::endl;
-            // Forge le nouveau paquet ETHERNET
-            if (!_arp_table.is_IP_in(ip_dest)) {
-                auto req_arp = Packet_Factory::ARP(*this, Packet::ARP::ARP_Opcode::REQUEST, interface->get_mac(), interface->get_ip(), {}, ip_dest);
-                send(*req_arp);
-                DEBUG("Normalement on a l'adresse MAC")
-                arp();
+        if (_forward) {
+            IPv4 ip_dest = P.data.ip.dest;
+            auto entries = _routing_table.longest_prefix(ip_dest);
+            if (entries._metric == 0){ // Si l'hôte de destination que nous cherchons se trouve sur un sous-réseau auquel nous avons accès
+                Interface* interface = _interfaces.at(entries._interface); 
+                ip_route();
+                std::cout << "La destination du paquet se trouve sur le sous-réseau " << IPv42char(entries._subnet) << " auquel je sais accéder depuis l'interface " << entries._interface << std::endl;
+                // Forge le nouveau paquet ETHERNET
+                if (!_arp_table.is_IP_in(ip_dest)) {
+                    auto req_arp = Packet_Factory::ARP(*this, Packet::ARP::ARP_Opcode::REQUEST, interface->get_mac(), interface->get_ip(), {}, ip_dest);
+                    send(*req_arp);
+                    DEBUG("Normalement on a l'adresse MAC")
+                    arp();
+                }
+                DEBUG(IPv42char(ip_dest))
+                DEBUG(MAC2char(_arp_table.from_IP(ip_dest)))
+                auto new_packet = Packet_Factory::ETHERNET(interface->get_mac(), _arp_table.from_IP(ip_dest), Packet::ETHERNET::EtherType::IP, P);
+                send(*new_packet);
+            }else{
+                DEBUG("La destination ne se trouve pas dans un de mes sous-réseau, par contre je peux le transférer à l'interface qui elle pourra transmettre au sous-réseau " + IPv42char(entries._subnet))
             }
-            DEBUG(IPv42char(ip_dest))
-            DEBUG(MAC2char(_arp_table.from_IP(ip_dest)))
-            auto new_packet = Packet_Factory::ETHERNET(interface->get_mac(), _arp_table.from_IP(ip_dest), Packet::ETHERNET::EtherType::IP, P);
-            send(*new_packet);
-        }else{
-            DEBUG("La destination ne se trouve pas dans un de mes sous-réseau, par contre je peux le transférer à l'interface qui elle pourra transmettre au sous-réseau " + IPv42char(entries._subnet))
+        } else {
+            LOG(_label, "Je n'ai pas l'option de forwarding activée")
         }
     }
 }
@@ -222,37 +231,14 @@ void IP_Machine::ICMP_action(Packet& P, interface_t from_interface) {
     }
 }
 
-void IP_Machine::UDP_action(Packet& P, interface_t from_interface) {
-    LOG(_label, "c'est un paquet UDP")
-    Packet* udp = P.data.ip.payload;
-    Packet* content = udp->data.udp.payload;
-}
-
-void IP_Machine::DHCP_action(Packet& P, interface_t from_interface) {
-    LOG(_label, "c'est un paquet DHCP")
-    // Packet* dhcp = P.data.
-}
-
 void IP_Machine::add_in_routing_table(IPv4 ip, CIDR mask, uint metric, interface_t interface){
-    _routing_table.add_in_table(get_subnet(ip, mask), mask, metric, interface, IP_DEFAULT);
+    _routing_table.add_in_table(get_subnet_part(ip, mask), mask, metric, interface, IP_DEFAULT);
 };
 
 void IP_Machine::action(Packet& P, interface_t from_interface) {
-    switch (P.type) {
-    case Packet::Type::ETHERNET:
-        datalink_layer(P, from_interface);
-        break;
-    case Packet::Type::ARP:
-        ARP_action(P, from_interface);
-        break;
-    case Packet::Type::IP:
-        IP_action(P, from_interface);
-        break;
-    case Packet::Type::UDP:
-        UDP_action(P, from_interface);
-        break;
-    case Packet::Type::DHCP:
-        DHCP_action(P, from_interface);
+    switch (P.data.ip.payload->type) {
+    case Packet::Type::ICMP:
+        ICMP_action(P, from_interface);
         break;
     default:
         break;
