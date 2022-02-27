@@ -26,9 +26,9 @@ Les protocoles disponibles sont les suivants
 Couche | Protocole |
 --- | --- |
 Liaison de données | Ethernet
-| ARP
+Liaison de données | ARP
 Internet | ICMP
-| IP
+Internet | IP
 Transport | UDP
 Application | DHCP
 
@@ -60,7 +60,9 @@ L'exemple dans le fichier `./main.cpp` est le suivant
                        (eth0)    (eth1)
 ```
 La machine A exécute un serveur DHCP pour le sous-réseau 10.0.1.0/24.
+
 L'IP de la machine B a été définie manuellement.
+
 L'IP de la machine C a été obtenue grâce au protocole DHCP.
 
 Dans l'exemple: C envoie un paquet ICMP (ping) vers B.
