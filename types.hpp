@@ -4,7 +4,6 @@
 #include <iostream>
 #include <tuple>
 #include <vector>
-class IP_Machine;
 
 #define SHOW_IP(ip) std::cout << IP_Machine::IPv42char(ip) << std::endl;
 
@@ -65,7 +64,8 @@ public:
     size_t size() { return _content.size(); }
     bool add_in_table(MAC mac, IPv4 ip, interface_t interface);
     std::vector<Entries> get_content() { return _content; }
-    
+    inline void clear_table() {_content.clear();}
+
     interface_t get_interface(MAC mac) { return get_content(mac).interface; };
     interface_t get_interface(IPv4 ip) { return get_content(ip).interface; };
     Entries get_content(MAC mac);
@@ -100,7 +100,6 @@ const MAC MAC_BROADCAST = {0xffffffffffff};
 const MAC MAC_ARP_REQUEST = {0x000000000000};
 const MAC MAC_ERROR = {};
 
-const IPv4 IP_DEFAULT = 0x0;
 const IPv4 IP_BROADCAST = 0xffffffff;
 
 #endif

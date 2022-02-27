@@ -7,6 +7,7 @@
 // Méthodes statiques
 
 int IP_Machine::total = 0;
+const IPv4 IP_Machine::IP_DEFAULT = IP_Machine::char2IPv4("0.0.0.0");
 
 // Eblas konekti inter du maŝinoj per iliajn interfacojn 
 bool IP_Machine::connect(IP_Machine& machine1, IP_Machine& machine2, interface_t interface1, interface_t interface2){
@@ -129,6 +130,7 @@ void IP_Machine::datalink_layer(Packet& P, interface_t from_interface) {
             LOG(_label, "ce paquet Ethernet n'est pas pour moi");
         }
     }
+    if (_arp_table.is_IP_in(IP_Machine::IP_DEFAULT)) _arp_table.clear_table();
 }
 
 void IP_Machine::internet_layer(Packet& P, interface_t from_interface) {
@@ -197,9 +199,9 @@ void IP_Machine::IP_action(Packet& P, interface_t from_interface) {
         if (_forward) {
             IPv4 ip_dest = P.data.ip.dest;
             auto entries = _routing_table.longest_prefix(ip_dest);
-            if (entries._metric == 0){ // Si l'hôte de destination que nous cherchons se trouve sur un sous-réseau auquel nous avons accès
-                Interface* interface = _interfaces.at(entries._interface); 
-                ip_route();
+            if (entries._metric == 0) { // Si l'hôte de destination que nous cherchons se trouve sur un sous-réseau auquel nous avons accès
+                SHOW_IP(ip_dest)
+                Interface* interface = _interfaces.at(entries._interface);
                 std::cout << "La destination du paquet se trouve sur le sous-réseau " << IPv42char(entries._subnet) << " auquel je sais accéder depuis l'interface " << entries._interface << std::endl;
                 // Forge le nouveau paquet ETHERNET
                 if (!_arp_table.is_IP_in(ip_dest)) {
@@ -213,6 +215,7 @@ void IP_Machine::IP_action(Packet& P, interface_t from_interface) {
                 auto new_packet = Packet_Factory::ETHERNET(interface->get_mac(), _arp_table.from_IP(ip_dest), Packet::ETHERNET::EtherType::IP, P);
                 send(*new_packet);
             }else{
+                // TODO (?)
                 DEBUG("La destination ne se trouve pas dans un de mes sous-réseau, par contre je peux le transférer à l'interface qui elle pourra transmettre au sous-réseau " + IPv42char(entries._subnet))
             }
         } else {

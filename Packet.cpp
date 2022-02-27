@@ -2,6 +2,10 @@
 #include "IP_Machine.hpp"
 #include "Interface.hpp"
 
+struct NotIPOnInterface : public std::exception { const char * what () const throw () { return "You try to create a packet for a interface who doesn't have a IP."; } };
+struct BadDestinationIP : public std::exception { const char * what () const throw () { return "The IP you try to join is not routable."; } };
+
+
 /* Décrémente le TTL du paquet et le détruit lorsqu'il arrive à 0 */
 bool Packet::control_TTL(Packet& P) {
     if (P.type == Type::IP) {
@@ -24,6 +28,7 @@ Packet* Packet_Factory::ETHERNET(MAC mac_sender, MAC mac_target, Packet::ETHERNE
 
 
 Packet* Packet_Factory::ARP(IP_Machine& from, Packet::ARP::ARP_Opcode opcode, MAC mac_sender, IPv4 ip_sender, MAC mac_target, IPv4 ip_target) {
+    if (ip_target == IP_Machine::IP_DEFAULT) throw BadDestinationIP();
     Packet* ethernet;
     Packet* arp = new Packet();
     arp->type = Packet::Type::ARP;
@@ -40,6 +45,8 @@ Packet* Packet_Factory::ARP(IP_Machine& from, Packet::ARP::ARP_Opcode opcode, MA
 };
 
 Packet* Packet_Factory::IP(Interface& from, Packet::IP::IP_Protocol protocol, IPv4 ip_dest, Packet* payload) {
+    if (from.get_ip() == IP_Machine::IP_DEFAULT) throw NotIPOnInterface();
+    if (ip_dest == IP_Machine::IP_DEFAULT) throw BadDestinationIP();
     using P = Packet::IP;
     Packet* ethernet;
     Packet* ip = new Packet();

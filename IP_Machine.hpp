@@ -59,6 +59,7 @@ public:
     virtual ~IP_Machine() noexcept = default;
 
     static int total;
+    static const IPv4 IP_DEFAULT;
     static bool connect(IP_Machine& machine1, IP_Machine& machine2, interface_t interface1, interface_t interface2);
     static IPv4 char2IPv4(std::string ip);
     static std::string IPv42char(IPv4 ip);
