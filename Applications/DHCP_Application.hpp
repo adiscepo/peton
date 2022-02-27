@@ -29,7 +29,7 @@ public:
 
     void socket(Packet& P, interface_t from_interface) override;
 
-    ~DHCP_Application();
+    ~DHCP_Application() override = default;
 };
 
 #endif // _APPLICATIONS_DHCP_APPLICATION_

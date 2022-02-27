@@ -17,6 +17,8 @@ public:
     void add_application(Application* app, port_t port) {_applications.insert({port, app});}
     void kill_application(port_t port) {_applications.erase(port);}
     
+    void runDHCP(interface_t interface); // Permet d'obtenir toutes les infos sur notre réseau et d'obtenir une IP
+
     void transport_layer(Packet& P, interface_t from_interface);
     void application_layer(Packet& P, interface_t from_interface, port_t port);
 

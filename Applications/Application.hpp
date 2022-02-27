@@ -13,7 +13,7 @@ public:
     Application(IP_Machine& machine) : _connected(machine) {};
     virtual void socket(Packet& P, interface_t from_interface) = 0;
     void send(Packet& P) { _connected.send(P); }
-    ~Application();
+    virtual ~Application() noexcept = default;
 };
 
 #endif // _APPLICATIONS_APPLICATION_

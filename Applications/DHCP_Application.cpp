@@ -76,6 +76,7 @@ void DHCP_Application::decline(Packet& P, interface_t from_interface) {
 void DHCP_Application::ack(Packet& P, interface_t from_interface) {
     LOG("DHCP Client", "Requête d'acquittement reçue.")
     Interface* new_interface = new Interface(_connected, from_interface, P.data.dhcp.CHADDR, P.data.dhcp.YIADDR, P.data.dhcp.options.subnet_mask);
+    SHOW_IP(P.data.dhcp.YIADDR);
     _connected.get_routing_table().add_in_table(get_subnet_part(P.data.dhcp.options.router, P.data.dhcp.options.subnet_mask), P.data.dhcp.options.subnet_mask, 0, from_interface, P.data.dhcp.options.router);
     _connected.set_interface(*new_interface);
     _connected.ip_route();

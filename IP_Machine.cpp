@@ -113,7 +113,7 @@ void IP_Machine::physical_layer(Packet& P, interface_t from_interface) {
 
 // Couche liaison des données
 void IP_Machine::datalink_layer(Packet& P, interface_t from_interface) {
-    // if (P.data.ethernet.payload->type == Packet::Type::IP) _arp_table.add_in_table(P.data.ethernet.src, P.data.ethernet.payload->data.ip.src, from_interface);
+    if (P.data.ethernet.payload->type == Packet::Type::IP) _arp_table.add_in_table(P.data.ethernet.src, P.data.ethernet.payload->data.ip.src, from_interface);
     // Lorsqu'un paquet arrive sur le réseau, on se limite au contenu direct (trame ethernet)
     // Est-ce que le paquet nous est destiné ?
     // Si oui, je l'ouvre et passe à la couche suivante (internet)
