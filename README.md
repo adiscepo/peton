@@ -8,7 +8,7 @@ Petite application permettant d'émuler un réseau informatique, de créer des p
 Une machine est représentée par un *corps* (la machine en elle même qui peut exécuter des processus (cf. Applications)) et une ou plusieurs *interface* (qui permet la connexion avec d'autres machines (cf. Interfaces)).
 
 La classe `Machine_Factory` permet la création de machine.
-Il est possible d'assigner une IP manuellement à notre machine, mais en faisant cela il ne faut pas oublier d'ajouter une entrée *default* dans la table de routage. 
+Il est possible d'assigner une IP manuellement à notre machine, mais en faisant cela il ne faut pas oublier d'ajouter une entrée *default* dans la table de routage.
 ```cpp
 machine->get_routing_table().add_in_table(subnet, CIDR, metric, interface, gateway);
 ```

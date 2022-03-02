@@ -18,6 +18,8 @@ add_executable(
     Applications/Application.hpp
     Applications/DHCP_Application.cpp
     Applications/DHCP_Application.hpp
+    Applications/DNS_Application.cpp
+    Applications/DNS_Application.hpp
     IP_Machine.hpp
     IP_Machine.cpp
     Machine_Factory.cpp

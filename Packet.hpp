@@ -5,7 +5,11 @@
 class IP_Machine;
 class Interface;
 
-// TODO: Réfléchir à réprésenter les paquets sous la forme Composite des design patterns, ou chaque element peut-être une classe dérivée de la classe paquet -> Risque de poser pb de problèmes de try_catch/casts pour pouvoir appeler les méthodes des classes dérivées alors que la référence voulue est celle de la classe de base (Peut-être essayer en définissant les références vers les classes dérivées dans les paramètres des fonctions)
+// TODO: Réfléchir à réprésenter les paquets sous la forme Composite des design patterns
+// ou chaque element peut-être une classe dérivée de la classe paquet -> Risque de poser
+// pb de problèmes de try_catch/casts pour pouvoir appeler les méthodes des classes dérivées 
+// alors que la référence voulue est celle de la classe de base (Peut-être essayer en définissant 
+// les références vers les classes dérivées dans les paramètres des fonctions)
 
 struct Packet {
     enum class Type {
@@ -26,6 +30,15 @@ struct Packet {
         EtherType type;
         Packet* payload;
         ETHERNET(MAC src, MAC dest, EtherType type, Packet* p) : src(src), dest(dest), type{type}, payload(p) {}
+        ETHERNET& operator=(const ETHERNET& E) {
+            if (this != &E) {
+                src = E.src;
+                dest = E.dest;
+                type = E.type;
+                payload = E.payload;
+            }
+            return *this;
+        }
         ~ETHERNET() {};
         friend std::ostream& operator<< (std::ostream& o, const ETHERNET& P);
     };
@@ -54,6 +67,17 @@ struct Packet {
         IPv4 dest;
         Packet* payload; 
         IP(IP_Protocol protocol, IPv4 s, IPv4 d, Packet* p) : protocol{protocol}, src(s), dest(d), payload(p) {}
+        IP& operator=(const IP& I) {
+            if (this != &I) {
+                version = I.version;
+                ttl = I.ttl;
+                src = I.src;
+                dest = I.dest;
+                protocol = I.protocol;
+                payload = I.payload;
+            }
+            return *this;
+        }
         ~IP() {};
         friend std::ostream& operator<< (std::ostream& o, const IP& P);
     };
@@ -73,6 +97,16 @@ struct Packet {
         uint16_t checksum = 0;
         Packet* payload;
         UDP(port_t src, port_t dest, Packet* payload) : src(src), dest(dest), payload(payload) {};
+        UDP& operator=(const UDP& U) {
+            if (this != &U) {
+                src = U.src;
+                dest = U.dest;
+                length = U.length;
+                checksum = U.checksum;
+                payload = U.payload;
+            }
+            return *this;
+        }
         ~UDP() {};
         friend std::ostream& operator<< (std::ostream& o, const UDP& P);
     };
@@ -145,10 +179,12 @@ struct Packet {
         std::vector<DNS_RR> rr_additional;
         uint16_t length;
         uint16_t checksum;
-        DNS(DNS_QR type, DNS_Opcode opcode, bool AA, bool TC, bool RD, bool RA, DNS_Rcode rcode, uint16_t QDCount, uint16_t ANCount, uint16_t NSCount, uint16_t ARCount, std::vector<DNS_Query> query, std::vector<DNS_RR> rr, std::vector<DNS_RR> rr_authoritative, std::vector<DNS_RR> rr_additional) :
-        type(type), opcode(opcode), AA(AA), TC(TC), RD(RD), RA(RA), rcode(rcode), QDCount(QDCount), ANCount(ANCount), NSCount(NSCount), ARCount(ARCount), query(query), rr(rr), rr_authoritative(rr_authoritative), rr_additional(rr_additional) {};
+        DNS(DNS_QR type, DNS_Opcode opcode, bool AA, bool TC, bool RD, bool RA, DNS_Rcode rcode, std::vector<DNS_Query> query, std::vector<DNS_RR> rr, std::vector<DNS_RR> rr_authoritative, std::vector<DNS_RR> rr_additional) :
+        type(type), opcode(opcode), AA(AA), TC(TC), RD(RD), RA(RA), rcode(rcode), QDCount(QDCount), ANCount(ANCount), NSCount(NSCount), ARCount(ARCount), query(query), rr(rr), rr_authoritative(rr_authoritative), rr_additional(rr_additional) {
+            QDCount = query.size(); ANCount = rr.size(); NSCount = rr_authoritative.size(); ARCount = rr_additional.size();
+        };
         ~DNS() {};
-        friend std::ostream& operator<< (std::ostream& o, const UDP& P);
+        friend std::ostream& operator<< (std::ostream& o, const DNS& D);
     };
 
     union Data {
@@ -161,21 +197,20 @@ struct Packet {
         DHCP dhcp;
         ~Data() {};
     } data{};
+
     Packet() {};
     Packet& operator=(const Packet& P) { 
+        std::cout << "Opérateur de copie du Packet" << std::endl;
         // TODO: Le faire mieux que ça
-        // if (P.type == Type::DNS) {
-        //     data.dns.query = P.data.dns.query;
-        //     data.dns.rr = P.data.dns.rr;
-        //     data.dns.rr_additional = P.data.dns.rr_additional;
-        //     data.dns.rr_authoritative = P.data.dns.rr_authoritative;
-        // }else if (P.type == Type::ETHERNET) {
-        //     data.ethernet.payload = P.data.ethernet.payload;
-        // }else if (P.type == Type::IP) {
-        //     data.ip.payload = P.data.ip.payload;
-        // }else if (P.type == Type::UDP) {
-        //     data.udp.payload = P.data.udp.payload;
-        // }
+        if (this != &P) {        
+            data.ethernet = P.data.ethernet;
+            data.arp = P.data.arp;
+            data.ip = P.data.ip;
+            data.icmp = P.data.icmp;
+            data.udp = P.data.udp;
+            data.dns = P.data.dns;
+            data.dhcp = P.data.dhcp;
+        }
         return *this;
      };
     static bool control_TTL(Packet& P);
@@ -196,6 +231,7 @@ public:
     static Packet* ICMP(Interface& from, IPv4 ip_dest, Packet::ICMP::ICMP_Type type);
     static Packet* UDP(Interface& from, IPv4 ip_dest, port_t src, port_t dest, Packet* payload);
     static Packet* DHCP(Interface& from, Packet::DHCP::DHCP_Message_Type type, IPv4 C, IPv4 Y, IPv4 S, IPv4 G, MAC M);
+    static Packet* DNS(Interface& from, Packet::DNS::DNS_QR type, Packet::DNS::DNS_Opcode opcode);
 
 };
 

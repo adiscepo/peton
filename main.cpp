@@ -4,6 +4,7 @@
 #include "IP_Machine.hpp"
 #include "Application_Machine.hpp"
 #include "Applications/DHCP_Application.hpp"
+#include "Applications/DNS_Application.hpp"
 #include "Interface.hpp"
 #include "Machine_Factory.hpp"
 #include "Link.hpp"
@@ -45,7 +46,10 @@ int main() {
     router->get_routing_table().add_in_table(subnet_2, {24}, 0, 1, IP_Machine::IP_DEFAULT);
     
     auto machine_1 = Machine_Factory::Application(1, {IP_Machine::char2MAC("00:00:00:00:BE:EF")}, {IP_Machine::char2IPv4("10.0.0.3")}, {{24}});
+    DNS_Application* dns = new DNS_Application(*machine_1);
+    dns->configure("zandies.net", IP_Machine::IP_DEFAULT);
     machine_1->get_routing_table().add_in_table(subnet_1, {24}, 0, 0, A_IP1);
+    machine_1->add_application(dns, 53);
 
     auto machine_2 = Machine_Factory::Application(1, {IP_Machine::char2MAC("00:00:00:00:13:37")});
     
