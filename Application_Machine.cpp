@@ -5,8 +5,8 @@
 
 void Application_Machine::action(Packet& P, interface_t from_interface) {
     IP_Machine::action(P, from_interface);
-    P = *P.data.ip.payload;
-    if (P.type == Packet::Type::UDP) transport_layer(P, from_interface);
+    Packet& content(*P.data.ip.payload);
+    if (content.type == Packet::Type::UDP) transport_layer(content, from_interface);
 }
 
 void Application_Machine::transport_layer(Packet& P, interface_t from_interface) {

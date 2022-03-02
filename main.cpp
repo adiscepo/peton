@@ -10,8 +10,6 @@
 #include "Packet.hpp"
 
 /* Farontu:
- * UDP  
- * DHCP (Permet une connexion plus Plug&Play entre les machines)
  * DNS
  * TCP
  * HTTP
@@ -58,7 +56,6 @@ int main() {
     IP_Machine::connect(*router, *machine_1, 0, 0);
     IP_Machine::connect(*router, *machine_2, 1, 0);
 
-    machine_1->runDHCP(0);
     machine_2->runDHCP(0);
 
     std::cout << *router << std::endl;
@@ -75,7 +72,6 @@ int main() {
     Packet* p = Packet_Factory::ICMP(machine_2->interface(0), IP_Machine::char2IPv4("10.0.0.3"), Packet::ICMP::ICMP_Type::ECHO_req); // 
     // // Packet* p = Packet_Factory::DHCP(*C_eth0, Packet::DHCP::DHCP_Message_Type::Discover, {}, {}, {}, {}, C_MAC); // 
     machine_2->send(*p); // Envoie le paquet sur le réseau
-    // std::cout << *C << std::endl;
-    // std::cout << *A << std::endl;
+
     return 0;
 }
