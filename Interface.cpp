@@ -20,7 +20,6 @@ bool Basic_Interface::send(Packet& P){
         DEBUG("Impossible d'envoyer un paquet incomplet sur le réseau")
         return false;
     }
-    DEBUG("L'interface n'est pas connectée");
     return false;
 };
 
@@ -35,11 +34,15 @@ bool Basic_Interface::receipt(Packet& P) {
         DEBUG("Impossible d'envoyer un paquet incomplet sur le réseau")
         return false;
     }
-    DEBUG("L'interface n'est pas connectée");
     return false;
 };
 
 // Méthodes
+
+IP_Machine* Interface::get_machine() { 
+    return dynamic_cast<IP_Machine*>(_connected); 
+}
+    
 
 std::ostream& operator<< (std::ostream& o, const Interface& I){
     o << IP_Machine::IPv42char(I._ip) << "/" << I._cidr << IP_Machine::MAC2char(I._mac) << "connecte à " << I._connected->get_label();

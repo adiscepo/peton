@@ -14,6 +14,10 @@ void Application_Machine::transport_layer(Packet& P, interface_t from_interface)
     case Packet::Type::UDP:
         UDP_action(P, from_interface);
         break;
+    // Je te redoute toi
+    case Packet::Type::TCP: 
+        TCP_action(P, from_interface);
+        break;
     default:
         break;
     };
@@ -21,6 +25,10 @@ void Application_Machine::transport_layer(Packet& P, interface_t from_interface)
 
 void Application_Machine::UDP_action(Packet& P, interface_t from_interface) {
     if (_applications.count(P.data.udp.dest)) application_layer(*P.data.udp.payload, from_interface, P.data.udp.dest);
+}
+
+void Application_Machine::TCP_action(Packet& P, interface_t from_interface) {
+    // if (_applications.count(P.data.tcp.dest))
 }
 
 void Application_Machine::application_layer(Packet& P, interface_t from_interface, port_t port) {

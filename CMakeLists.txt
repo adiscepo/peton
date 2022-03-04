@@ -32,6 +32,8 @@ add_executable(
     Link.cpp
     Interface.hpp
     Interface.cpp
+    Switch.cpp
+    Switch.hpp
     types.hpp
     types.cpp
 )

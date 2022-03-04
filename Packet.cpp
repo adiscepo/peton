@@ -114,6 +114,13 @@ Packet* Packet_Factory::UDP(Interface& from, IPv4 ip_dest, port_t src, port_t de
     return Packet_Factory::IP(from, Packet::IP::IP_Protocol::UDP, ip_dest, udp);
 }
 
+Packet* Packet_Factory::TCP(Interface& from, IPv4 ip_dest, port_t dest, port_t src, uint32_t seq, uint32_t ack, bool SYN, bool FIN, Packet* payload){
+    Packet* tcp = new Packet();
+    tcp->type = Packet::Type::TCP;
+    tcp->data.tcp = Packet::TCP(src, dest, seq, ack, SYN, FIN, payload);
+    return Packet_Factory::IP(from, Packet::IP::IP_Protocol::TCP, ip_dest, tcp);
+}
+
 Packet* Packet_Factory::ICMP(Interface& from, IPv4 ip_dest, Packet::ICMP::ICMP_Type type) {
     Packet* icmp = new Packet();
     icmp->type = Packet::Type::ICMP;

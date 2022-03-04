@@ -90,6 +90,28 @@ ARP_Table::Entries ARP_Table::get_content(IPv4 ip) {
     return {};
 };
 
+bool CAM_Table::add_in_table(MAC mac, interface_t interface) {
+    if (!is_mac_in(mac)) {
+        _content.insert({interface, mac});
+        return true;
+    }
+    return false;
+}
+
+bool CAM_Table::is_mac_in(MAC mac) {
+    for (auto elem: _content){
+        if (elem.second == mac) return true;
+    }
+    return false;
+}
+
+interface_t CAM_Table::to_mac(MAC mac) {
+    if (is_mac_in(mac)) {
+        for (auto elem: _content) if (elem.second == mac) return elem.first;
+    }
+    return -1;
+}
+
 std::ostream& operator<<(std::ostream& o, const ARP_Table& R){
     o << "+-------------------+------------------+-----------+" << std::endl;
     o << "|        MAC        |        IP        | interface |" << std::endl;

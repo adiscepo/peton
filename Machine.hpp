@@ -1,43 +1,37 @@
-// #ifndef _MACHINE_
-// #define _MACHINE_
+#ifndef _MACHINE_
+#define _MACHINE_
 
-// #include <iostream>
-// #include <vector>
-// #include "Packet.hpp"
-// #include "Interface.hpp"
-// #include "Link.hpp"
+#include <iostream>
+#include <map>
+#include "Packet.hpp"
+#include "Interface.hpp"
+#include "Link.hpp"
 
-// class Machine {
-// protected:
-//     char _label;
-//     interface_t _nb_interface = 0;
-//     std::vector<Basic_Interface*> _interfaces = {};
+class Machine {
+protected:
+    char _label;
+    std::map<interface_t, Basic_Interface*> _interfaces = {};
+public:
+    inline Machine() : _label(static_cast<char>(65 + total)) { Machine::total += 1; };
+    Machine(std::vector<Basic_Interface*>::iterator begin, std::vector<Basic_Interface*>::iterator end) {for (auto i = begin; i != end; ++i) _interfaces.insert({(*i)->get_interface_number(), *i}); };
+    Machine(std::vector<Interface*>::iterator begin, std::vector<Interface*>::iterator end) {for (auto i = begin; i != end; ++i) _interfaces.insert({(*i)->get_interface_number(), *i}); };
+    bool as_interface(interface_t interface) 
+        { return (interface < _interfaces.size()) ? true : false; }
+    void set_interface(Basic_Interface& interface);
+    void set_interface(Interface& interface);
+    void set_interfaces(std::vector<Basic_Interface*> interface);
+    void set_interfaces(std::vector<Interface*> interface);
 
-// public:
-//     static int total;
-//     static bool connect(Machine& machine1, Machine& machine2, interface_t interface1, interface_t interface2);
-
-//     Machine(std::vector<Basic_Interface*> interfaces);
+    virtual void send(Packet& P) = 0;
+    virtual void receipt(Packet& p, interface_t from_interface) = 0;
     
-//     bool as_interface(interface_t interface) 
-//         { return (interface < _nb_interface) ? true : false; }
-//     interface_t nb_interface() { return _nb_interface; }
-//     virtual Link* interface(interface_t interface);
-//     virtual void forward(Packet&) {};
-//     virtual void receipt(Packet&, interface_t) {};
-//     bool is_interface_connected(interface_t interface) 
-//         { return (this->interface(interface) == nullptr) ? false : true; }
-//     std::vector<Link*> connected_interfaces();
-//     // DEBUG
-//     // Link* link_at_interface(interface_t interface) { return as_interface(interface) ? _linked_to[interface]->get_link() : NULL; }
-//     char get_label() { return _label; }
-//     void set_label(char s) { _label = s; }
+    char get_label() { return _label; }
+    void set_label(char s) { _label = s; }
+    
+    virtual ~Machine() noexcept = default;
 
-//     Link* operator[](interface_t interface){ return this->interface(interface); }
+    static int total;
+    static bool connect(Machine& machine1, Machine& machine2, interface_t interface1, interface_t interface2);
+};
 
-//     virtual ~Machine() noexcept = default;
-
-//     friend std::ostream& operator << (std::ostream& o, const Machine& M);
-// };
-
-// #endif
+#endif

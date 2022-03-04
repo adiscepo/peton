@@ -6,17 +6,9 @@
 
 // Méthodes statiques
 
-int IP_Machine::total = 0;
 const IPv4 IP_Machine::IP_DEFAULT = IP_Machine::char2IPv4("0.0.0.0");
 
 // Eblas konekti inter du maŝinoj per iliajn interfacojn 
-bool IP_Machine::connect(IP_Machine& machine1, IP_Machine& machine2, interface_t interface1, interface_t interface2){
-    if (machine1.as_interface(interface1) && machine2.as_interface(interface2)) {
-        Basic_Interface::connect(*(machine1._interfaces[interface1]), *(machine2._interfaces[interface2]));
-        return true;
-    }
-    return false;
-}
 
 // Transformas la ĉenkaraktero el IP adreso
 IPv4 IP_Machine::char2IPv4(std::string ip) {
@@ -80,22 +72,9 @@ std::string IP_Machine::MAC2char(MAC mac) {
 
 // Méthodes
 
-// Konstruemo
-IP_Machine::IP_Machine(bool forward, std::vector<Interface*> interfaces) : _label(static_cast<char>(65 + total)), _forward(forward) 
-    {for (auto elem: interfaces) _interfaces.insert({elem->get_interface_number(), elem}); IP_Machine::total += 1; };
-
-void IP_Machine::set_interface(Interface& interface) {
-    LOG(_label, "a une nouvelle interface connectée")
-    _interfaces[interface.get_interface_number()] = &interface;
-}
-
-void IP_Machine::set_interfaces(std::vector<Interface*> interfaces) {
-    for (auto elem: interfaces) _interfaces.insert({elem->get_interface_number(), elem});
-}
-
 bool IP_Machine::as_ip(IPv4 ip) { 
     for (auto i: _interfaces) {
-        if (i.second->get_ip() == ip) return true;
+        if (dynamic_cast<Interface*>(i.second)->get_ip() == ip) return true;
     } 
     return false;
 }
@@ -190,7 +169,7 @@ void IP_Machine::ARP_action(Packet& P, interface_t from_interface) {
 
 void IP_Machine::IP_action(Packet& P, interface_t from_interface) {
     // std::cout << IP_Machine::IPv42char(P.data.ip.src) << " a envoyé un paquet IP. On l'a reçu depuis l'interface eth" << from_interface << std::endl;
-    if (as_ip(P.data.ip.dest) || is_IP_broadcast(P.data.ip.dest, _interfaces[from_interface]->get_cidr())) { // Si le paquet est destiné à la machine
+    if (as_ip(P.data.ip.dest) || is_IP_broadcast(P.data.ip.dest, dynamic_cast<Interface*>(_interfaces[from_interface])->get_cidr())) { // Si le paquet est destiné à la machine
         LOG(_label, "Ce paquet IP est pour moi, je l'ouvre")
         action(P, from_interface);
     } else {
@@ -201,11 +180,11 @@ void IP_Machine::IP_action(Packet& P, interface_t from_interface) {
             auto entries = _routing_table.longest_prefix(ip_dest);
             if (entries._metric == 0) { // Si l'hôte de destination que nous cherchons se trouve sur un sous-réseau auquel nous avons accès
                 SHOW_IP(ip_dest)
-                Interface* interface = _interfaces.at(entries._interface);
+                Basic_Interface* interface = _interfaces.at(entries._interface);
                 std::cout << "La destination du paquet se trouve sur le sous-réseau " << IPv42char(entries._subnet) << " auquel je sais accéder depuis l'interface " << entries._interface << std::endl;
                 // Forge le nouveau paquet ETHERNET
                 if (!_arp_table.is_IP_in(ip_dest)) {
-                    auto req_arp = Packet_Factory::ARP(*this, Packet::ARP::ARP_Opcode::REQUEST, interface->get_mac(), interface->get_ip(), {}, ip_dest);
+                    auto req_arp = Packet_Factory::ARP(*this, Packet::ARP::ARP_Opcode::REQUEST, interface->get_mac(), dynamic_cast<Interface*>(interface)->get_ip(), {}, ip_dest);
                     send(*req_arp);
                     DEBUG("Normalement on a l'adresse MAC")
                     arp();
@@ -273,7 +252,7 @@ std::ostream& operator << (std::ostream& o, const IP_Machine &I) {
         o << "| ";
         std::cout.setf(std::ios::left, std::ios::adjustfield);
         std::cout.width(16);
-        o << IP_Machine::IPv42char(interface.second->get_ip());
+        o << IP_Machine::IPv42char(dynamic_cast<Interface*>(interface.second)->get_ip());
         o << "| ";
         std::cout.setf(std::ios::left, std::ios::adjustfield);
         std::cout.width(18);

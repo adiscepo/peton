@@ -9,6 +9,7 @@ class Application_Machine : public IP_Machine {
 protected:
     void action(Packet& p, interface_t from_interface) override;
     void UDP_action(Packet& P, interface_t from_interface);
+    void TCP_action(Packet& P, interface_t from_interface);
 public:
     Application_Machine() : IP_Machine() {};
     Application_Machine(bool forward) : IP_Machine(forward) {};

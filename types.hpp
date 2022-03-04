@@ -4,6 +4,7 @@
 #include <iostream>
 #include <tuple>
 #include <vector>
+#include <map>
 
 #define SHOW_IP(ip) std::cout << IP_Machine::IPv42char(ip) << std::endl;
 
@@ -91,6 +92,15 @@ public:
     friend std::ostream& operator<<(std::ostream& o, const Routing_Table& R);
 };
 
+class CAM_Table {
+    std::map<interface_t, MAC> _content = {};
+public:
+    inline CAM_Table() = default;
+    bool add_in_table(MAC mac, interface_t interface);
+    bool is_mac_in(MAC mac);
+    interface_t to_mac(MAC mac);
+};
+
 enum class ARP_Opcode {
     REQUEST = 1,
     RESPONSE = 2
@@ -99,6 +109,7 @@ enum class ARP_Opcode {
 const MAC MAC_BROADCAST = {0xffffffffffff};
 const MAC MAC_ARP_REQUEST = {0x000000000000};
 const MAC MAC_ERROR = {};
+const MAC MAC_DEFAULT = {}; // For unmanaged switchs
 
 const IPv4 IP_BROADCAST = 0xffffffff;
 

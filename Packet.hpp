@@ -19,6 +19,7 @@ struct Packet {
         ICMP,
         UDP,
         DHCP,
+        TCP,
         DNS
     } type = Type::ETHERNET;
 
@@ -111,6 +112,29 @@ struct Packet {
         friend std::ostream& operator<< (std::ostream& o, const UDP& P);
     };
 
+    struct TCP {
+        port_t src;
+        port_t dest;
+        uint32_t sequence_number;
+        uint32_t ack_number;
+        bool SYN;
+        bool FIN;
+        Packet* payload;
+        TCP& operator=(const TCP& T) {
+            if (this != &T) {
+                src = T.src;
+                dest = T.dest;
+                sequence_number = T.sequence_number;
+                ack_number = T.ack_number;
+                SYN = T.SYN;
+                FIN = T.FIN;
+                payload = T.payload;
+            }
+            return *this;
+        }
+        TCP(port_t src, port_t dest, uint32_t seq, uint32_t ack_n, bool SYN, bool FIN, Packet* payload) : src(src), dest(dest), sequence_number(seq), ack_number(ack_n), SYN(SYN), FIN(FIN) {};
+    };
+
     struct DHCP {
         enum class DHCP_Message_Type { Discover = 1, Offer = 2, Request = 3, Decline = 4, ACK = 5, NAK = 6, Release = 7, Inform = 8 };
         // uint8_t OP; // Operation Code: Specifies the general type of message. A value of 1 indicates a request message, while a value of 2 is a reply message.
@@ -194,6 +218,7 @@ struct Packet {
         ICMP icmp;
         UDP udp;
         DNS dns;
+        TCP tcp;
         DHCP dhcp;
         ~Data() {};
     } data{};
@@ -208,6 +233,7 @@ struct Packet {
             data.ip = P.data.ip;
             data.icmp = P.data.icmp;
             data.udp = P.data.udp;
+            data.tcp = P.data.tcp;
             data.dns = P.data.dns;
             data.dhcp = P.data.dhcp;
         }
@@ -219,6 +245,7 @@ struct Packet {
         if (P.type == Packet::Type::ARP)        o << P.data.arp;
         if (P.type == Packet::Type::IP)         o << P.data.ip;
         if (P.type == Packet::Type::DHCP)       o << P.data.dhcp;
+        if (P.type == Packet::Type::UDP)       o << P.data.udp;
         return o;
     }
 };
@@ -231,7 +258,7 @@ public:
     static Packet* ICMP(Interface& from, IPv4 ip_dest, Packet::ICMP::ICMP_Type type);
     static Packet* UDP(Interface& from, IPv4 ip_dest, port_t src, port_t dest, Packet* payload);
     static Packet* DHCP(Interface& from, Packet::DHCP::DHCP_Message_Type type, IPv4 C, IPv4 Y, IPv4 S, IPv4 G, MAC M);
-    static Packet* DNS(Interface& from, Packet::DNS::DNS_QR type, Packet::DNS::DNS_Opcode opcode);
+    static Packet* TCP(Interface& from, IPv4 ip_dest, port_t dest, port_t src, uint32_t seq, uint32_t ack, bool SYN, bool FIN, Packet* payload);
 
 };
 
