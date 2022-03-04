@@ -1,6 +1,6 @@
 #include "DHCP_Application.hpp"
 #include "../Packet.hpp"
-#include "../IP_Machine.hpp"
+#include "../Machines/IP_Machine.hpp"
 #include "../Interface.hpp"
 #include <math.h>
 

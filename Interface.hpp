@@ -3,6 +3,7 @@
 
 #include "types.hpp"
 #include "Packet.hpp"
+
 class Machine;
 class IP_Machine;
 class Link;

@@ -2,7 +2,6 @@
 #define _SWITCH_
 
 #include "Machine.hpp"
-#include "Interface.hpp"
 
 class Switch : public Machine {
     CAM_Table _cam_table;

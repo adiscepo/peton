@@ -1,5 +1,5 @@
 #include "types.hpp"
-#include "IP_Machine.hpp"
+#include "Machines/IP_Machine.hpp"
 
 #include <bitset>
 

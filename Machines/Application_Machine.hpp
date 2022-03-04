@@ -2,7 +2,7 @@
 #define _APPLICATION_MACHINE_
 
 #include "IP_Machine.hpp"
-#include "Applications/Application.hpp"
+#include "../Applications/Application.hpp"
 
 class Application_Machine : public IP_Machine {
     std::map<port_t, Application*> _applications = {};

@@ -1,6 +1,6 @@
 #include "Machine_Factory.hpp"
 #include "IP_Machine.hpp"
-#include "Interface.hpp"
+#include "../Interface.hpp"
 
 struct IncorrectInterfaceMACNumber : public std::exception { const char * what () const throw () { return "The number of interfaces and the number of MAC address are different."; } };
 

@@ -1,7 +1,7 @@
-#include "Packet.hpp"
-#include "Interface.hpp"
+#include "../Packet.hpp"
+#include "../Interface.hpp"
 #include "Application_Machine.hpp"
-#include "Applications/DHCP_Application.hpp"
+#include "../Applications/DHCP_Application.hpp"
 
 void Application_Machine::action(Packet& P, interface_t from_interface) {
     IP_Machine::action(P, from_interface);

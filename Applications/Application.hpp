@@ -2,7 +2,7 @@
 #define _APPLICATIONS_APPLICATION_
 
 #include "../Packet.hpp"
-#include "../IP_Machine.hpp"
+#include "../Machines/IP_Machine.hpp"
 
 class Application {
 protected:

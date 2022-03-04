@@ -3,9 +3,9 @@
 
 #include <iostream>
 #include <map>
-#include "Packet.hpp"
-#include "Interface.hpp"
-#include "Link.hpp"
+#include "../Packet.hpp"
+#include "../Interface.hpp"
+#include "../Link.hpp"
 
 class Machine {
 protected:

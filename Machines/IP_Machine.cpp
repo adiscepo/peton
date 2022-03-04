@@ -1,8 +1,8 @@
 #include "IP_Machine.hpp"
-#include "Packet.hpp"
+#include "../Packet.hpp"
 #include <bitset>
-#include "Link.hpp"
-#include "Interface.hpp"
+#include "../Link.hpp"
+#include "../Interface.hpp"
 
 // Méthodes statiques
 

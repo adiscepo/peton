@@ -2,9 +2,10 @@
 #define _IP_MACHINE_
 
 #include "Machine.hpp"
-#include "types.hpp"
+#include "../types.hpp"
 #include <string>
 #include <map>
+
 class Interface;
 class Packet;
 

@@ -1,5 +1,5 @@
 #include "Packet.hpp"
-#include "IP_Machine.hpp"
+#include "Machines/IP_Machine.hpp"
 #include "Interface.hpp"
 
 struct NotIPOnInterface : public std::exception { const char * what () const throw () { return "You try to create a packet for a interface who doesn't have a IP."; } };

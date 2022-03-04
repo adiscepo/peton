@@ -1,14 +1,14 @@
 #include <iostream>
 #include <vector>
 #include <bitset>
-#include "IP_Machine.hpp"
-#include "Application_Machine.hpp"
+#include "Machines/Machine_Factory.hpp"
+#include "Machines/IP_Machine.hpp"
+#include "Machines/Switch.hpp"
+#include "Machines/Application_Machine.hpp"
 #include "Applications/DHCP_Application.hpp"
 #include "Applications/DNS_Application.hpp"
 #include "Interface.hpp"
-#include "Machine_Factory.hpp"
 #include "Link.hpp"
-#include "Switch.hpp"
 #include "Packet.hpp"
 
 /* Farontu:

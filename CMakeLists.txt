@@ -12,28 +12,28 @@ project(Peton)
 add_executable(
     peton 
     main.cpp
-    Machine.hpp
-    Machine.cpp
+    Machines/Machine.hpp
+    Machines/Machine.cpp
     Applications/Application.cpp
     Applications/Application.hpp
     Applications/DHCP_Application.cpp
     Applications/DHCP_Application.hpp
     Applications/DNS_Application.cpp
     Applications/DNS_Application.hpp
-    IP_Machine.hpp
-    IP_Machine.cpp
-    Machine_Factory.cpp
-    Machine_Factory.hpp
-    Application_Machine.hpp
-    Application_Machine.cpp
+    Machines/IP_Machine.hpp
+    Machines/IP_Machine.cpp
+    Machines/Machine_Factory.cpp
+    Machines/Machine_Factory.hpp
+    Machines/Application_Machine.hpp
+    Machines/Application_Machine.cpp
     Packet.hpp
     Packet.cpp
     Link.hpp
     Link.cpp
     Interface.hpp
     Interface.cpp
-    Switch.cpp
-    Switch.hpp
+    Machines/Switch.cpp
+    Machines/Switch.hpp
     types.hpp
     types.cpp
 )
