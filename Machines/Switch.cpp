@@ -1,6 +1,7 @@
 #include "Switch.hpp"
 #include "IP_Machine.hpp"
 
+// TODO: Spanning tree protocol (BDPU)
 
 Switch::Switch(size_t number_of_interfaces) : _number_of_interfaces(number_of_interfaces) {
     std::vector<Basic_Interface*> res = {};
@@ -15,7 +16,7 @@ void Switch::send(Packet& P) {
     LOG(_label, "Renvoi un paquet")
     MAC dest = P.data.ethernet.dest;
     if (_cam_table.is_mac_in(dest)){
-        LOG(_label, "Je sais où aller")
+        LOG(_label, "J'ai une entrée pour cette adresse MAC dans ma table MAC")
         _interfaces[_cam_table.to_mac(dest)]->send(P);
     }else{
         LOG(_label, "Je sais pas où aller")

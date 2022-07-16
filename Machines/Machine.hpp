@@ -6,7 +6,12 @@
 #include "../Packet.hpp"
 #include "../Interface.hpp"
 #include "../Link.hpp"
-
+/**
+ * @brief Représente une machine ayant des interfaces
+ * Attributs:
+ *  _label: char identifiant la machine (utilisée pour le débug actuellement, sera remplacée en GUI par un label)
+ *  _interfaces: map liant numéro d'interface et une interface
+ */
 class Machine {
 protected:
     char _label;
