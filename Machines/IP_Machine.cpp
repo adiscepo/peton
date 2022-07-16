@@ -2,7 +2,13 @@
 #include "../Packet.hpp"
 #include <bitset>
 #include "../Link.hpp"
+#include "../types.hpp"
 #include "../Interface.hpp"
+
+// Exceptions
+
+struct MachineDoNotHaveInterface : public std::exception { const char * what () const throw () { return "The interface you try to attain is not set on this Machine"; } };
+
 
 // Méthodes statiques
 
@@ -71,6 +77,13 @@ std::string IP_Machine::MAC2char(MAC mac) {
 }
 
 // Méthodes
+
+void IP_Machine::set_IP(interface_t interface, IPv4 ip) {
+    if (as_interface(interface)) {
+        dynamic_cast<Interface*>(_interfaces[interface])->set_IP(ip);
+    } 
+    else { throw MachineDoNotHaveInterface(); }
+}
 
 bool IP_Machine::as_ip(IPv4 ip) { 
     for (auto i: _interfaces) {
@@ -252,7 +265,10 @@ std::ostream& operator << (std::ostream& o, const IP_Machine &I) {
         o << "| ";
         std::cout.setf(std::ios::left, std::ios::adjustfield);
         std::cout.width(16);
-        o << IP_Machine::IPv42char(dynamic_cast<Interface*>(interface.second)->get_ip());
+        if (dynamic_cast<Interface*>(interface.second)->get_ip() != NO_IP)
+            o << IP_Machine::IPv42char(dynamic_cast<Interface*>(interface.second)->get_ip());
+        else
+            o << "NO IP";
         o << "| ";
         std::cout.setf(std::ios::left, std::ios::adjustfield);
         std::cout.width(18);

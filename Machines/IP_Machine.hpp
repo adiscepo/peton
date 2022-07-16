@@ -27,6 +27,8 @@ public:
     IP_Machine(bool forward) : Machine(), _forward(forward) {};
     IP_Machine(bool forward, std::vector<Interface*> interfaces) : Machine(interfaces.begin(), interfaces.end()), _forward(forward) {};
 
+    void set_IP(interface_t interface, IPv4 ip);
+
     bool as_interface(interface_t interface) 
         { return (interface < _interfaces.size()) ? true : false; }
     Interface& interface(interface_t i) { return dynamic_cast<Interface&>(*_interfaces[i]); }

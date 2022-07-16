@@ -9,7 +9,7 @@ IP_Machine* Machine_Factory::IP(uint number_of_interfaces, std::vector<MAC> list
     IP_Machine *res = new IP_Machine();
     std::vector<Interface*> inter = {};
     for (interface_t i = 0; i < number_of_interfaces; i++) {
-        Interface * in = new Interface(*res, i, list_of_mac[i], {0}, {0});
+        Interface * in = new Interface(*res, i, list_of_mac[i], NO_IP, NO_CIDR);
         inter.push_back(in);
     }
     res->set_interfaces(inter);
@@ -33,7 +33,7 @@ Application_Machine* Machine_Factory::Application(uint number_of_interfaces, std
     Application_Machine *res = new Application_Machine();
     std::vector<Interface*> inter = {};
     for (interface_t i = 0; i < number_of_interfaces; i++) {
-        Interface * in = new Interface(*res, i, list_of_mac[i], {0}, {0});
+        Interface * in = new Interface(*res, i, list_of_mac[i], NO_IP, NO_CIDR);
         inter.push_back(in);
     }
     res->set_interfaces(inter);

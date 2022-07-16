@@ -12,6 +12,9 @@ public:
     void send(Packet& P) override;
     void receipt(Packet& p, interface_t from_interface) override;
     ~Switch() = default;
+
+    friend std::ostream& operator << (std::ostream& o, const Switch& S);
+
 };
 
 #endif // _SWITCH_

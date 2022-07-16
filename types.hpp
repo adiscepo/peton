@@ -99,6 +99,7 @@ public:
     bool add_in_table(MAC mac, interface_t interface);
     bool is_mac_in(MAC mac);
     interface_t to_mac(MAC mac);
+    friend std::ostream& operator<<(std::ostream& o, const CAM_Table& C);
 };
 
 enum class ARP_Opcode {
@@ -112,5 +113,8 @@ const MAC MAC_ERROR = {};
 const MAC MAC_DEFAULT = {}; // For unmanaged switchs
 
 const IPv4 IP_BROADCAST = 0xffffffff;
+const IPv4 NO_IP = -1;
+
+const CIDR NO_CIDR = {34};
 
 #endif

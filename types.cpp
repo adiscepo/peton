@@ -199,3 +199,27 @@ std::ostream& operator<<(std::ostream& o, const Routing_Table& R){
     o << "+-----------------------------------------------------------------+";
     return o;
 };
+
+// -------------------- CAM TABLE ----------------------
+std::ostream& operator<<(std::ostream& o, const CAM_Table& C){
+    o << "+-------------------+-----------+" << std::endl;
+    o << "|        MAC        | interface |" << std::endl;
+    o << "+-------------------+-----------+" << std::endl;
+    auto table = C._content;
+    for (auto const& [key, value] : table){
+        o << "|";
+        std::cout.setf(std::ios::right, std::ios::adjustfield);
+        std::cout.width(18);
+        o << IP_Machine::MAC2char(value);
+        o << " |";
+        std::cout.setf(std::ios::right, std::ios::adjustfield);
+        std::cout.width(10);
+        o << key;
+        o << " |" << std::endl;
+    }
+    if(C._content.size() == 0) {
+        o << "|         Aucune entrée         |" << std::endl;
+    }
+    o << "+-------------------------------+";
+    return o;
+}

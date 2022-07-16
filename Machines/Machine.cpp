@@ -1,14 +1,15 @@
 #include "Machine.hpp"
 
+struct MachineDoNotHaveInterface : public std::exception { const char * what () const throw () { return "The interface you try to attain is not set on this Machine"; } };
+
 int Machine::total = 0;
 
 bool Machine::connect(Machine& machine1, Machine& machine2, interface_t interface1, interface_t interface2){
     if (machine1.as_interface(interface1) && machine2.as_interface(interface2)) {
         Basic_Interface::connect(*(machine1._interfaces[interface1]), *(machine2._interfaces[interface2]));
-        DEBUG("Machines connectées")
         return true;
     }
-    DEBUG("Machines non connectées")
+    throw MachineDoNotHaveInterface();
     return false;
 }
 
