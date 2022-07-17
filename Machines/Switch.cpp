@@ -19,9 +19,11 @@ void Switch::send(Packet& P) {
         LOG(_label, "J'ai une entrée pour cette adresse MAC dans ma table MAC")
         _interfaces[_cam_table.to_mac(dest)]->send(P);
     }else{
-        LOG(_label, "Je sais pas où aller, dans le doute j'envoi à toutes les directions")
+        LOG(_label, "Je sais pas où aller, dans le doute j'envoie dans toutes les directions")
         for (auto i: _interfaces) i.second->send(P);
-        _waiting.push_back(dest);
+        // Si l'adresse MAC n'est pas dans la "table d'attente" ou n'est pas une adresse de broadcast, on l'ajoute
+        if (find(_waiting.begin(), _waiting.end(), dest) != _waiting.end() || dest != MAC_BROADCAST)
+            _waiting.push_back(dest);
     }
 }
 
@@ -40,16 +42,12 @@ void Switch::receipt(Packet& p, interface_t from_interface) {
 
 
 std::ostream& operator << (std::ostream& o, const Switch &S) {
-    o << "+---------------[ Switch " << S._label << "]-------------------+" << std::endl;
+    o << "+------[ Switch " << S._label << "]--------+" << std::endl;
      for (auto interface: S._interfaces) {
         o << "| eth";
         std::cout.setf(std::ios::left, std::ios::adjustfield);
         std::cout.width(7);
         o << interface.second->get_interface_number();
-        o << "| ";
-        std::cout.setf(std::ios::left, std::ios::adjustfield);
-        std::cout.width(18);
-        o << IP_Machine::MAC2char(interface.second->get_mac());
         o << "| ";
         std::cout.setf(std::ios::left, std::ios::adjustfield);
         std::cout.width(12);
@@ -61,6 +59,8 @@ std::ostream& operator << (std::ostream& o, const Switch &S) {
             o << "|" << std::endl;
         }
     }
-    o << "+-----------+-------------------+-------------+";
+    o << "+-----------+-------------+";
+    o << std::endl;
+    o << S._cam_table;
     return o;
 }
